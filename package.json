@@ -4,12 +4,32 @@
   "description": "illimutablemen.com Machiavellian Maxims repackaged",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel server/src --out-dir server/dist",
+    "dev": "nodemon --exec npm run restart",
+    "restart": "rimraf server/dist && npm run build && npm run start",
+    "start": "node server/dist/index.js"
   },
   "keywords": [
     "node.js",
     "express.js"
   ],
   "author": "Alvin Sovereign",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.6",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.9.3",
+    "morgan": "^1.9.1"
+  }
 }
