@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel server/src --out-dir server/dist",
+    "build": "babel api/src --out-dir api/dist",
     "dev": "nodemon --exec npm run restart",
-    "restart": "rimraf server/dist && npm run build && npm run start",
-    "start": "node server/dist/index.js"
+    "restart": "rimraf api/dist && npm run build && npm run start",
+    "start": "node api/dist/index.js"
   },
   "keywords": [
     "node.js",

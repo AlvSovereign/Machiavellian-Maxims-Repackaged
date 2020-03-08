@@ -3,10 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const getData = async () => {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}`);
+    console.log('response: ', await response.json());
+    return response;
+  };
+
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}`).then(value =>
-      console.log('value: ', value)
-    );
+    getData();
   }, []);
 
   return (
