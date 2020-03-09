@@ -4,7 +4,6 @@ import { getMaximFromRedis, setMaximInRedis } from '../../cache';
 const checkCache = async key => {
   try {
     const cachedMaxim = await getMaximFromRedis(key);
-    console.log('cachedMaxim: ', cachedMaxim);
     if (cachedMaxim) {
       return JSON.parse(cachedMaxim);
     }
@@ -20,7 +19,6 @@ const controllers = {
       // query redis cache first,
       const maximNumber = req.params.maximNumber;
       const maximFromCache = await checkCache(maximNumber);
-      console.log('maximFromCache: ', maximFromCache);
       // if maxim exists in redis cache, return it
       if (maximFromCache) {
         return res.status(200).json({ data: maximFromCache });
@@ -30,7 +28,7 @@ const controllers = {
         .lean()
         .exec();
       // then save result to redis cache
-      setMaximInRedis(maximNumber, JSON.stringify(fetchedMaxim));
+      setMaximInRedis(maximNumber, 3600, JSON.stringify(fetchedMaxim));
 
       console.log('fetchedMaxim: ', fetchedMaxim);
       res.status(200).json({ data: fetchedMaxim });

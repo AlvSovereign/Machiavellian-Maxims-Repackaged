@@ -4,7 +4,7 @@ import config from './config';
 
 const redisClient = redis.createClient(config.redis);
 const getMaximFromRedis = util.promisify(redisClient.get).bind(redisClient);
-const setMaximInRedis = util.promisify(redisClient.set).bind(redisClient);
+const setMaximInRedis = util.promisify(redisClient.setex).bind(redisClient);
 
 redisClient.on('connect', function() {
   console.log('Redis client connected');
