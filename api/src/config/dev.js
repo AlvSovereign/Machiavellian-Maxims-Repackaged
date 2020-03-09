@@ -3,8 +3,13 @@ export const config = {
     jwt: 'learneverything'
   },
   dbUrl: 'mongodb://localhost:27017/machiavellianMaxims',
-  mongooseConfig: {
+  mongoose: {
     useNewUrlParser: true,
     useUnifiedTopology: true
+  },
+  redis: {
+    host: '127.0.0.1',
+    port: 6379,
+    retry_strategy: () => 1000
   }
 };

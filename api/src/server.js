@@ -24,11 +24,12 @@ const connect = (url, config) => mongoose.connect(url, config);
 
 export const start = async () => {
   try {
-    await connect(config.dbUrl, config.mongooseConfig);
+    await connect(config.dbUrl, config.mongoose);
+
     app.listen(config.port, () => {
       console.log(`REST API on http://localhost:${config.port}`);
     });
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error(err);
   }
 };
