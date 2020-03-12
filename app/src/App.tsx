@@ -1,34 +1,40 @@
-import React, { useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import FontFaceObserver from 'fontfaceobserver';
+import { store } from './store/store';
+import routes from './routes/routes';
+import './app.scss';
 
 function App() {
-  const getData = async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}`);
-    console.log('response: ', await response.json());
-    return response;
+  const [fontReady, setFontReady] = useState(false);
+
+  const loadFonts = async () => {
+    const font = new FontFaceObserver('CalendasPlus');
+    font.load().then(() => {
+      setFontReady(true);
+    });
   };
 
   useEffect(() => {
-    getData();
+    loadFonts();
   }, []);
 
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      {fontReady && (
+        <div className='App'>
+          <Router>
+            <Route
+              exact
+              path={routes.maxim.path}
+              component={routes.maxim.component}
+            />
+            {/* <Route component={routes.invalidPage.component} /> */}
+          </Router>
+        </div>
+      )}
+    </Provider>
   );
 }
 

@@ -6,9 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel api/src --out-dir api/dist",
-    "dev": "nodemon --exec npm run restart",
+    "start:dev": "cd api && nodemon --exec npm run restart",
     "restart": "rimraf api/dist && npm run build && npm run start",
-    "start": "node api/dist/index.js"
+    "start:api": "cd api && node api/dist/index.js",
+    "start:app": "cd app && npm run start"
   },
   "keywords": [
     "node.js",

@@ -14,11 +14,11 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+app.use('/maxim', maximRouter);
+
 app.get('/', (req, res) => {
   res.status(200).json({ data: 'Hellow' });
 });
-
-app.use('/maxim', maximRouter);
 
 const connect = (url, config) => mongoose.connect(url, config);
 

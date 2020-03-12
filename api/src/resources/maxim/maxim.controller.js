@@ -21,6 +21,7 @@ const controllers = {
       const maximFromCache = await checkCache(maximNumber);
       // if maxim exists in redis cache, return it
       if (maximFromCache) {
+        console.log('from redis cache!');
         return res.status(200).json({ data: maximFromCache });
       }
       // else query mondodb
@@ -30,7 +31,6 @@ const controllers = {
       // then save result to redis cache
       setMaximInRedis(maximNumber, 3600, JSON.stringify(fetchedMaxim));
 
-      console.log('fetchedMaxim: ', fetchedMaxim);
       res.status(200).json({ data: fetchedMaxim });
     } catch (err) {
       console.error('err: ', err);
