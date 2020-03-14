@@ -1,4 +1,5 @@
 import React from 'react';
+import { MaximInterface } from '../store/slice/maxim';
 
 const Maxim = ({ data }: MaximProps) => {
   const { _id, maxim, maximNumber }: MaximInterface = data;
@@ -15,10 +16,4 @@ export { Maxim };
 
 interface MaximProps {
   data: MaximInterface;
-}
-
-export interface MaximInterface {
-  _id: string;
-  maxim: string;
-  maximNumber: string;
 }
