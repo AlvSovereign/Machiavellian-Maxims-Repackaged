@@ -3,7 +3,7 @@ import { MaximPage } from '../pages/Maxim/MaximPage';
 
 const routes: IRoutes = {
   maxim: {
-    path: '/maxim',
+    path: '/maxims',
     component: MaximPage
   }
   // invalidPage: {
