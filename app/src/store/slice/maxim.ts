@@ -4,13 +4,15 @@ import {
   ThunkAction,
   Action
 } from '@reduxjs/toolkit';
+import Service from '../../services/services';
 
 const initialState: MaximState = {
   currentMaxim: {
     _id: '',
     maxim: '',
     maximNumber: 0
-  }
+  },
+  isError: false
 };
 
 const getRandomNumber = (min: number, max: number) =>
@@ -40,20 +42,14 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
   }
 
   // otherwise fetch maxim from DB
-  let response: any;
-  try {
-    response = await fetch(
-      `${process.env.REACT_APP_API_URL}/maxim/${maximNumber}`
-    );
-  } catch (err) {
-    console.error(err);
+  const response = await Service().fetchMaxim(maximNumber);
+
+  if (response.error) {
+    dispatch(errorFetchingMaxim({ ...response }));
     return;
   }
 
-  if (response.ok) {
-    const maxim = await response.json();
-    dispatch(getMaxim({ ...maxim.data }));
-  }
+  dispatch(getMaxim({ ...response }));
 };
 
 const maximSlice = createSlice({
@@ -81,18 +77,22 @@ const maximSlice = createSlice({
       }
     },
     currentMaxim: (state, action: PayloadAction<MaximInterface>) => {
-      state = { ...state, ...action.payload };
+      state = { ...state, ...action.payload, isError: false };
+    },
+    errorFetchingMaxim: (state, action: PayloadAction<MaximError>) => {
+      return (state = { ...state, isError: true });
     }
   }
 });
 
 export { fetchMaxim };
-export const { getMaxim } = maximSlice.actions;
+export const { errorFetchingMaxim, getMaxim } = maximSlice.actions;
 export default maximSlice.reducer;
 
 export interface MaximState {
   currentMaxim: MaximInterface;
   [maximNumber: number]: any;
+  isError: boolean;
 }
 
 export interface StoredMaxim {
@@ -105,4 +105,9 @@ export interface MaximInterface {
   maxim: string;
   maximNumber: number;
 }
+
+export interface MaximError {
+  error: string;
+}
+
 export type AppThunk = ThunkAction<void, any, unknown, Action<string>>;

@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Maxim } from '../../components/Maxim';
 import { fetchMaxim } from '../../store/slice/maxim';
 import { RootStateInterface } from '../../store/store';
+import { MaximError } from '../../components/MaximError';
 
 const MaximPage = (props: MaximPageProps) => {
   const dispatch = useDispatch();
-  const { currentMaxim } = useSelector(
+  const { currentMaxim, isError } = useSelector(
     (state: RootStateInterface) => state.maxims
   );
 
@@ -17,16 +18,26 @@ const MaximPage = (props: MaximPageProps) => {
   return (
     <div
       className={'h-screen w-screen flex flex-col items-center justify-center'}>
-      {currentMaxim && <Maxim data={currentMaxim} />}
-      <div className='flex flex-row items-center justify-center'>
-        <button type='button' onClick={() => dispatch(fetchMaxim('prev'))}>
-          {'Previous Maxim'}
+      {isError || currentMaxim.maximNumber === 0 ? (
+        <MaximError />
+      ) : (
+        <Maxim data={currentMaxim} />
+      )}
+      <div className='container mx-auto flex flex-row items-center justify-around'>
+        <button
+          type='button'
+          className='bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded'
+          onClick={() => dispatch(fetchMaxim('prev'))}>
+          {'<-'}
         </button>
         <button type='button' onClick={() => dispatch(fetchMaxim())}>
-          {'Get Maxim'}
+          {'Random Maxim'}
         </button>
-        <button type='button' onClick={() => dispatch(fetchMaxim('next'))}>
-          {'Next Maxim'}
+        <button
+          type='button'
+          className='bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded'
+          onClick={() => dispatch(fetchMaxim('next'))}>
+          {'->'}
         </button>
       </div>
     </div>
