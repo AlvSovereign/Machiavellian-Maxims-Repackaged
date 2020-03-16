@@ -29,6 +29,13 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
     currentMaximNumber = getState().maxims.currentMaxim.maximNumber;
     maximNumber =
       arg === 'prev' ? currentMaximNumber - 1 : currentMaximNumber + 1;
+
+    maximNumber =
+      maximNumber === 0
+        ? (maximNumber = 290)
+        : maximNumber === 291
+        ? (maximNumber = 1)
+        : maximNumber;
   } else {
     maximNumber = getRandomNumber(1, 290);
   }

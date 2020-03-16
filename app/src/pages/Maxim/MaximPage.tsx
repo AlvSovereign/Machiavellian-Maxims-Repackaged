@@ -1,44 +1,60 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Maxim } from '../../components/Maxim';
 import { fetchMaxim } from '../../store/slice/maxim';
 import { RootStateInterface } from '../../store/store';
 import { MaximError } from '../../components/MaximError';
+import { Button } from '../../components/Button';
 
 const MaximPage = (props: MaximPageProps) => {
   const dispatch = useDispatch();
   const { currentMaxim, isError } = useSelector(
     (state: RootStateInterface) => state.maxims
   );
+  const focusDiv: any = useRef(null);
 
   useEffect(() => {
     dispatch(fetchMaxim());
   }, []);
 
+  useLayoutEffect(() => {
+    focusDiv.current && focusDiv.current.focus();
+  }, []);
+
+  const navigateMaxims = (event: React.KeyboardEvent) => {
+    switch (event.keyCode) {
+      case 37:
+        dispatch(fetchMaxim('prev'));
+        break;
+      case 39:
+        dispatch(fetchMaxim('next'));
+        break;
+    }
+  };
+
   return (
     <div
-      className={'h-screen w-screen flex flex-col items-center justify-center'}>
+      ref={focusDiv}
+      tabIndex={1}
+      className={'h-screen w-screen flex flex-col items-center justify-center'}
+      onKeyDown={e => navigateMaxims(e)}>
       {isError || currentMaxim.maximNumber === 0 ? (
         <MaximError />
       ) : (
         <Maxim data={currentMaxim} />
       )}
-      <div className='container mx-auto flex flex-row items-center justify-around'>
-        <button
-          type='button'
-          className='bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded'
-          onClick={() => dispatch(fetchMaxim('prev'))}>
-          {'<-'}
-        </button>
-        <button type='button' onClick={() => dispatch(fetchMaxim())}>
+      <div
+        className='mx-auto flex flex-row items-center justify-around'
+        style={{ width: '100%', maxWidth: 640 }}>
+        <Button type='button' onClick={() => dispatch(fetchMaxim('prev'))}>
+          &#8592;
+        </Button>
+        <Button onClick={() => dispatch(fetchMaxim())} type='button'>
           {'Random Maxim'}
-        </button>
-        <button
-          type='button'
-          className='bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded'
-          onClick={() => dispatch(fetchMaxim('next'))}>
-          {'->'}
-        </button>
+        </Button>
+        <Button type='button' onClick={() => dispatch(fetchMaxim('next'))}>
+          &#8594;
+        </Button>
       </div>
     </div>
   );
