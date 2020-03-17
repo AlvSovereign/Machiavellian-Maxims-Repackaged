@@ -8,9 +8,7 @@ const Service = () => {
   return {
     fetchMaxim: async (maximNumber: number) => {
       try {
-        const response = await axiosInstance.get(
-          `${baseURL}/maxim/${maximNumber}`
-        );
+        const response = await axiosInstance.get(`/maxim/${maximNumber}`);
 
         return response.data.data;
       } catch (error) {

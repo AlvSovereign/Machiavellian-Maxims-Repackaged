@@ -6,6 +6,7 @@ const Typography = ({
   classes,
   colour = 'black',
   component = 'p',
+  href,
   variant
 }: TypographyProps) => {
   const clsxs = clsx(
@@ -21,7 +22,11 @@ const Typography = ({
   );
   const Component = component;
 
-  return <Component className={clsxs}>{children}</Component>;
+  return (
+    <Component href={href} target={href && 'blank_'} className={clsxs}>
+      {children}
+    </Component>
+  );
 };
 
 export { Typography };
@@ -31,5 +36,7 @@ interface TypographyProps {
   colour?: 'red' | 'black' | 'white';
   component: any;
   classes?: string;
+  href?: string;
   variant: 'button' | 'title' | 'paragraph';
+  props?: any;
 }

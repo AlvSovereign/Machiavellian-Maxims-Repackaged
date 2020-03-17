@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
-import { store } from './store/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from './store/store';
 import routes from './routes/routes';
 import './app.scss';
 
@@ -22,18 +23,20 @@ function App() {
 
   return (
     <Provider store={store}>
-      {fontReady && (
-        <div className='App'>
-          <Router>
-            <Route
-              exact
-              path={routes.maxim.path}
-              component={routes.maxim.component}
-            />
-            {/* <Route component={routes.invalidPage.component} /> */}
-          </Router>
-        </div>
-      )}
+      <PersistGate loading={null} persistor={persistor}>
+        {fontReady && (
+          <div className='App'>
+            <Router>
+              <Route
+                exact
+                path={routes.maxim.path}
+                component={routes.maxim.component}
+              />
+              {/* <Route component={routes.invalidPage.component} /> */}
+            </Router>
+          </div>
+        )}
+      </PersistGate>
     </Provider>
   );
 }

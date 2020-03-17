@@ -1,20 +1,10 @@
 import React from 'react';
+import Markdown from 'markdown-to-jsx';
 import { Typography } from './Typography';
 
-const Markdown = (props: any) => {
+const MaximMarkdown = (props: any) => {
   const options = {
     overrides: {
-      h2: {
-        component: (props: any) => (
-          <Typography
-            component='h2'
-            colour='red'
-            classes='mb-4'
-            variant='title'
-            {...props}
-          />
-        )
-      },
       p: {
         component: (props: any) => (
           <Typography
@@ -26,20 +16,17 @@ const Markdown = (props: any) => {
           />
         )
       },
-      // span: {
-      //   props: {
-      //     className: `${classes.root} ${classes.content}`
-      //   },
-      //   component: (props: any) => (
-      //     <Typography
-      //       gutterBottom
-      //       align={mobile ? 'center' : 'left'}
-      //       variant={mobile ? 'h6' : 'h5'}
-      //       component={'p'}
-      //       {...props}
-      //     />
-      //   )
-      // },
+      span: {
+        component: (props: any) => (
+          <Typography
+            classes='mb-4'
+            colour='black'
+            component='blockquote'
+            variant='paragraph'
+            {...props}
+          />
+        )
+      },
       a: {
         component: (props: any) => (
           <Typography
@@ -55,6 +42,6 @@ const Markdown = (props: any) => {
   return <Markdown options={options} {...props} />;
 };
 
-export { Markdown };
+export { MaximMarkdown };
 
-interface MarkdownProps {}
+interface MaximMarkdown {}

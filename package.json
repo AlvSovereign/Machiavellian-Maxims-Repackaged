@@ -26,6 +26,8 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@piotr-cz/redux-persist-idb-storage": "^1.0.2",
+    "@types/markdown-to-jsx": "^6.11.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "clsx": "^1.1.0",
@@ -35,7 +37,9 @@
     "markdown-to-jsx": "^6.11.0",
     "mongoose": "^5.9.3",
     "morgan": "^1.9.1",
+    "react-markdown": "^4.3.1",
     "redis": "^3.0.2",
+    "redux-persist": "^6.0.0",
     "util": "^0.12.2"
   }
 }
