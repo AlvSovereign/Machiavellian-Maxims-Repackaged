@@ -40,11 +40,15 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
     maximNumber = getRandomNumber(1, 290);
   }
 
-  const checkMaximInState = getState()[maximNumber!] || null;
+  const maximInState = getState().maxims[maximNumber] || null;
 
   // if maxim is in state return this instead of fetching a new one
-  if (checkMaximInState) {
-    dispatch(getMaxim(checkMaximInState));
+  if (maximInState) {
+    const maxim = {
+      maximNumber,
+      ...maximInState
+    };
+    dispatch(getMaxim(maxim));
     return;
   }
 
@@ -65,7 +69,7 @@ const maximSlice = createSlice({
   reducers: {
     getMaxim: {
       reducer: (state, action: PayloadAction<any>) => {
-        return { ...state, ...action.payload };
+        return { ...state, ...action.payload, isError: false };
       },
       prepare: (fetchedMaxim: MaximInterface) => {
         const { _id, maxim, maximNumber } = fetchedMaxim;
