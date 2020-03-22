@@ -26,7 +26,7 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
   let maximNumber: number;
 
   if (arg) {
-    currentMaximNumber = getState().maxims.currentMaxim.maximNumber;
+    currentMaximNumber = getState().maxim.currentMaxim.maximNumber;
     maximNumber =
       arg === 'prev' ? currentMaximNumber - 1 : currentMaximNumber + 1;
 
@@ -40,7 +40,7 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
     maximNumber = getRandomNumber(1, 290);
   }
 
-  const maximInState = getState().maxims[maximNumber] || null;
+  const maximInState = getState().maxim[maximNumber] || null;
 
   // if maxim is in state return this instead of fetching a new one
   if (maximInState) {

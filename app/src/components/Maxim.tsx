@@ -1,5 +1,5 @@
 import React from 'react';
-import { MaximInterface } from '../store/slice/maxim';
+import { MaximInterface } from 'store/slice/maxim';
 import { Typography } from './Typography';
 import { MaximMarkdown } from './Markdown';
 

@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import FontFaceObserver from 'fontfaceobserver';
 import { PersistGate } from 'redux-persist/integration/react';
-import { persistor, store } from './store/store';
-import routes from './routes/routes';
-import './app.scss';
+import { persistor, store } from 'store/store';
+import routes from 'routes/routes';
+import 'app.scss';
 
 function App() {
   const [fontReady, setFontReady] = useState(false);

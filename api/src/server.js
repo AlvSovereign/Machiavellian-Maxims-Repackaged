@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import config from './config';
 import maximRouter from './resources/maxim/maxim.router';
+import { signin, signup } from './utils/auth';
 
 export const app = express();
 
@@ -14,11 +15,9 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+app.post('/signup', signup);
+app.post('/signin', signin);
 app.use('/maxim', maximRouter);
-
-app.get('/', (req, res) => {
-  res.status(200).json({ data: 'Hellow' });
-});
 
 const connect = (url, config) => mongoose.connect(url, config);
 

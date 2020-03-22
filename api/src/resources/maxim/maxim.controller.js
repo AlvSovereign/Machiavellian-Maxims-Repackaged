@@ -1,7 +1,7 @@
 import { Maxim } from './maxim.model';
 import { getMaximFromRedis, setMaximInRedis } from '../../cache';
 
-const checkCache = async key => {
+const checkRedisCache = async key => {
   try {
     const cachedMaxim = await getMaximFromRedis(key);
     if (cachedMaxim) {
@@ -18,7 +18,7 @@ const controllers = {
     try {
       // query redis cache first,
       const maximNumber = req.params.maximNumber;
-      const maximFromCache = await checkCache(maximNumber);
+      const maximFromCache = await checkRedisCache(maximNumber);
       // if maxim exists in redis cache, return it
       if (maximFromCache) {
         console.log('from redis cache!');

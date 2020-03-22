@@ -1,20 +1,20 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Maxim } from '../../components/Maxim';
-import { fetchMaxim } from '../../store/slice/maxim';
-import { RootStateInterface } from '../../store/store';
-import { MaximError } from '../../components/MaximError';
-import { Button } from '../../components/Button';
+import { fetchMaxim } from 'store/slice/maxim';
+import { RootStateInterface } from 'store/store';
+import { MaximError } from 'components/MaximError';
+import { Button } from 'components/Button';
+import { Maxim } from 'components/Maxim';
 
 const MaximPage = (props: MaximPageProps) => {
   const dispatch = useDispatch();
   const { currentMaxim, isError } = useSelector(
-    (state: RootStateInterface) => state.maxims
+    (state: RootStateInterface) => state.maxim
   );
   const focusDiv: any = useRef(null);
 
   useEffect(() => {
-    dispatch(fetchMaxim());
+    !currentMaxim && dispatch(fetchMaxim());
   }, []);
 
   useLayoutEffect(() => {

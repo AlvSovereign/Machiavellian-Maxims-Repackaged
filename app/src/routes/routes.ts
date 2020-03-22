@@ -1,9 +1,9 @@
-import { MaximPage } from '../pages/Maxim/MaximPage';
+import { MaximPage } from 'pages/Maxim/MaximPage';
 // import ErrorPage from './error-page/ErrorPage';
 
 const routes: IRoutes = {
   maxim: {
-    path: '/maxims',
+    path: '/maxim',
     component: MaximPage
   }
   // invalidPage: {
