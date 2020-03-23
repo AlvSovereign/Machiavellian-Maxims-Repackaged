@@ -4,7 +4,8 @@ import {
   ThunkAction,
   Action
 } from '@reduxjs/toolkit';
-import Service from '../../services/services';
+import API from '../../services/api';
+import { AppThunk } from 'store/store';
 
 const initialState: MaximState = {
   currentMaxim: {
@@ -53,7 +54,7 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
   }
 
   // otherwise fetch maxim from DB
-  const response = await Service().fetchMaxim(maximNumber);
+  const response = await API().fetchMaxim(maximNumber);
 
   if (response.error) {
     dispatch(errorFetchingMaxim({ ...response }));
@@ -88,9 +89,9 @@ const maximSlice = createSlice({
       }
     },
     currentMaxim: (state, action: PayloadAction<MaximInterface>) => {
-      state = { ...state, ...action.payload, isError: false };
+      return (state = { ...state, ...action.payload, isError: false });
     },
-    errorFetchingMaxim: (state, action: PayloadAction<MaximError>) => {
+    errorFetchingMaxim: (state, action: PayloadAction<MaximInterface>) => {
       return (state = { ...state, isError: true });
     }
   }
@@ -120,5 +121,3 @@ export interface MaximInterface {
 export interface MaximError {
   error: string;
 }
-
-export type AppThunk = ThunkAction<void, any, unknown, Action<string>>;

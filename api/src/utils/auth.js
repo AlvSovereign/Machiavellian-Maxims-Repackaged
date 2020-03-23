@@ -22,12 +22,14 @@ const signup = async (req, res) => {
   }
 
   try {
-    const createdUser = await User.create({
+    const { local, savedMaxims } = await User.create({
       'local.email': email,
       'local.password': password
     });
 
-    return res.status(201).send({ email });
+    const { email } = local;
+
+    return res.status(201).send({ email, savedMaxims });
   } catch (err) {
     console.error('err: ', err);
     return res
@@ -62,7 +64,10 @@ const signin = async (req, res) => {
       });
     }
 
-    return res.status(201).send({ message: 'success' });
+    const { local, savedMaxims } = userExists;
+    const { email } = local;
+
+    return res.status(201).send({ email, savedMaxims });
   } catch (err) {
     console.error('err: ', err);
     return res.status(400).send({ message: err.message });

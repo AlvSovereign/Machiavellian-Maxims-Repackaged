@@ -5,6 +5,8 @@ import FontFaceObserver from 'fontfaceobserver';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from 'store/store';
 import routes from 'routes/routes';
+import { Header } from 'components/Header';
+import { Modal } from 'components/Modal';
 import 'app.scss';
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
       <PersistGate loading={null} persistor={persistor}>
         {fontReady && (
           <div className='App'>
+            <Header />
             <Router>
               <Route
                 exact
@@ -34,6 +37,7 @@ function App() {
               />
               {/* <Route component={routes.invalidPage.component} /> */}
             </Router>
+            <Modal />
           </div>
         )}
       </PersistGate>

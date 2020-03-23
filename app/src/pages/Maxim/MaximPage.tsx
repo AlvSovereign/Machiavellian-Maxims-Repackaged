@@ -46,13 +46,25 @@ const MaximPage = (props: MaximPageProps) => {
       <div
         className='mx-auto flex flex-row items-center justify-around'
         style={{ width: '100%', maxWidth: 640 }}>
-        <Button type='button' onClick={() => dispatch(fetchMaxim('prev'))}>
+        <Button
+          size='regular'
+          type='button'
+          onClick={() => dispatch(fetchMaxim('prev'))}
+          variant='default'>
           &#8592;
         </Button>
-        <Button onClick={() => dispatch(fetchMaxim())} type='button'>
+        <Button
+          size='regular'
+          onClick={() => dispatch(fetchMaxim())}
+          type='button'
+          variant='default'>
           {'Random Maxim'}
         </Button>
-        <Button type='button' onClick={() => dispatch(fetchMaxim('next'))}>
+        <Button
+          size='regular'
+          type='button'
+          onClick={() => dispatch(fetchMaxim('next'))}
+          variant='default'>
           &#8594;
         </Button>
       </div>

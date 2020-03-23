@@ -10,13 +10,15 @@ const Typography = ({
   variant
 }: TypographyProps) => {
   const clsxs = clsx(
+    'font-serif',
     {
       'text-gray-900': colour === 'black',
       'text-red-700': colour === 'red',
       'text-white': colour === 'white',
-      'font-serif text-base': variant === 'button',
-      'font-serif text-xl md:text-2xl': variant === 'paragraph',
-      'font-serif text-3xl md:text-4xl': variant === 'title'
+      'text-base': variant === 'button',
+      'text-sm': variant === 'small',
+      'text-xl md:text-2xl': variant === 'paragraph',
+      'text-3xl md:text-4xl': variant === 'title'
     },
     classes
   );
@@ -37,6 +39,6 @@ interface TypographyProps {
   component: any;
   classes?: string;
   href?: string;
-  variant: 'button' | 'title' | 'paragraph';
+  variant: 'small' | 'button' | 'title' | 'paragraph';
   props?: any;
 }
