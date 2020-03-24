@@ -17,15 +17,17 @@ const alertSlice = createSlice({
       );
 
       return (state = { alerts: filteredAlerts });
-    }
+    },
+    removeAllAlert: state => initialState
   }
 });
 
-export const { addAlert, removeAlert } = alertSlice.actions;
+export const { addAlert, removeAlert, removeAllAlert } = alertSlice.actions;
 export default alertSlice.reducer;
 
 export interface AlertInterface {
   autoDismiss?: number;
+  dismissable?: boolean;
   id: number;
   message?: string;
   type?: 'error';

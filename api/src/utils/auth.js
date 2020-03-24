@@ -44,7 +44,8 @@ const signin = async (req, res, next) => {
   if (!email || !password) {
     return next({
       status: 401,
-      message: 'Please provide valid email and/or password'
+      message: `Please provide valid ${!email ? 'email' : 'password'}`,
+      inputName: !email ? 'email' : 'password'
     });
   }
 
@@ -53,7 +54,8 @@ const signin = async (req, res, next) => {
   if (!userExists) {
     return next({
       status: 401,
-      message: 'Please provide valid email and/or password'
+      message: 'Please provide valid email',
+      inputName: 'email'
     });
   }
 
@@ -63,7 +65,8 @@ const signin = async (req, res, next) => {
     if (!match) {
       return next({
         status: 401,
-        message: 'Please provide valid email and/or password'
+        message: 'Please provide valid password',
+        inputName: 'password'
       });
     }
 
