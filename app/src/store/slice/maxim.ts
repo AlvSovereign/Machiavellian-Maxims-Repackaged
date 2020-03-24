@@ -13,6 +13,7 @@ const initialState: MaximState = {
     maxim: '',
     maximNumber: 0
   },
+  errorMessage: '',
   isError: false
 };
 
@@ -56,8 +57,8 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
   // otherwise fetch maxim from DB
   const response = await API().fetchMaxim(maximNumber);
 
-  if (response.error) {
-    dispatch(errorFetchingMaxim({ ...response }));
+  if (response.errorMessage) {
+    dispatch(errorFetchingMaxim(response.errorMessage));
     return;
   }
 
@@ -91,8 +92,12 @@ const maximSlice = createSlice({
     currentMaxim: (state, action: PayloadAction<MaximInterface>) => {
       return (state = { ...state, ...action.payload, isError: false });
     },
-    errorFetchingMaxim: (state, action: PayloadAction<MaximInterface>) => {
-      return (state = { ...state, isError: true });
+    errorFetchingMaxim: (state, action: PayloadAction<string>) => {
+      return (state = {
+        ...state,
+        errorMessage: action.payload,
+        isError: true
+      });
     }
   }
 });
@@ -105,6 +110,7 @@ export interface MaximState {
   currentMaxim: MaximInterface;
   [maximNumber: number]: any;
   isError: boolean;
+  errorMessage: string;
 }
 
 export interface StoredMaxim {
@@ -116,8 +122,4 @@ export interface MaximInterface {
   _id: string;
   maxim: string;
   maximNumber: number;
-}
-
-export interface MaximError {
-  error: string;
 }

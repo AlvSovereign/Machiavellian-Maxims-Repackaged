@@ -9,9 +9,11 @@ import createIdbStorage from '@piotr-cz/redux-persist-idb-storage/src';
 import appReducers, { AppState } from 'store/slice/app';
 import maximReducers, { MaximState } from 'store/slice/maxim';
 import userReducers, { UserState } from 'store/slice/user';
+import alertReducers, { AlertState } from 'store/slice/alert';
 
 const rootReducer = combineReducers({
   app: appReducers,
+  alert: alertReducers,
   maxim: maximReducers,
   user: userReducers
 });
@@ -34,6 +36,7 @@ export { persistor, store };
 
 export interface RootStateInterface {
   app: AppState;
+  alert: AlertState;
   maxim: MaximState;
   user: UserState;
 }

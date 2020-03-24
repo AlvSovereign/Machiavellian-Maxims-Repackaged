@@ -6,6 +6,8 @@ import cors from 'cors';
 import config from './config';
 import maximRouter from './resources/maxim/maxim.router';
 import { signin, signup } from './utils/auth';
+import { logErrors } from './utils/logErrors';
+import { genericErrorHandler } from './utils/genericErrorHandler';
 
 export const app = express();
 
@@ -18,6 +20,8 @@ app.use(morgan('dev'));
 app.post('/signup', signup);
 app.post('/signin', signin);
 app.use('/maxim', maximRouter);
+app.use(logErrors);
+app.use(genericErrorHandler);
 
 const connect = (url, config) => mongoose.connect(url, config);
 

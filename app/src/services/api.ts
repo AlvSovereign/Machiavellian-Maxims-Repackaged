@@ -14,19 +14,16 @@ const API = () => {
         return response.data.data;
       } catch (error) {
         console.error(error);
-        new Error(error);
-        return { error: error.message };
+        return { errorMessage: error.response.data.message };
       }
     },
     signin: async (credentials: SigninCredentials) => {
       try {
         const response = await axiosInstance.post('/signin', credentials);
-        console.log('response: ', response);
-
         return response.data.data;
       } catch (error) {
-        console.error('error: ', error);
-        return { error: error.message };
+        console.error(error);
+        return { errorMessage: error.response.data.message };
       }
     }
   };

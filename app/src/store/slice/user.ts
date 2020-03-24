@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API from 'services/api';
 import { SigninCredentials } from 'components/Modal';
 import { AppThunk } from 'store/store';
-
+import { addAlert } from './alert';
 const initialState: UserState = {
   email: '',
   savedMaxims: [],
@@ -15,12 +15,20 @@ const userSignin = (credentials: SigninCredentials): AppThunk => async (
   getState
 ) => {
   const response = await API().signin(credentials);
-  // console.log('response: ', response);
 
-  if (response.error) {
-    dispatch(signinError({ ...response }));
+  if (response.errorMessage) {
+    dispatch(signinError(response.errorMessage));
+    dispatch(
+      addAlert({
+        autoDismiss: 4000,
+        id: Date.now(),
+        message: response.errorMessage,
+        type: 'error'
+      })
+    );
     return;
   }
+
   dispatch(signin(response));
 };
 
@@ -31,7 +39,7 @@ const userSlice = createSlice({
     signin: (state, action: PayloadAction<SigninCredentials>) => {
       return (state = { ...state, ...action.payload });
     },
-    signinError: (state, action) => {
+    signinError: (state, action: PayloadAction<string>) => {
       return (state = {
         ...state,
         errorMessage: action.payload,

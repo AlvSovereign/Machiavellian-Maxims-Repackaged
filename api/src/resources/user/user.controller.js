@@ -5,7 +5,9 @@ const controllers = {
     const { username, password } = req.body;
 
     try {
-    } catch (err) {}
+    } catch (err) {
+      next(err);
+    }
   }
 };
 

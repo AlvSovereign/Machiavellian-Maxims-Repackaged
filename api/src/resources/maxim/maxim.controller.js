@@ -14,7 +14,7 @@ const checkRedisCache = async key => {
 };
 
 const controllers = {
-  getMaximByMaximNumber: async (req, res) => {
+  getMaximByMaximNumber: async (req, res, next) => {
     try {
       // query redis cache first,
       const maximNumber = req.params.maximNumber;
@@ -33,8 +33,11 @@ const controllers = {
 
       res.status(200).json({ data: fetchedMaxim });
     } catch (err) {
-      console.error('err: ', err);
-      res.status(400).end();
+      return next({
+        error: err,
+        message: 'Error fetching Maxim. Please try again',
+        status: 500
+      });
     }
   }
 };
