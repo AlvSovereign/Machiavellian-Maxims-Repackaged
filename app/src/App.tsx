@@ -37,7 +37,7 @@ function App() {
             {/* <Route component={routes.invalidPage.component} /> */}
           </Router>
           <Modal />
-          {alerts.length && <Alert alerts={alerts} />}
+          {alerts.length ? <Alert alerts={alerts} /> : null}
         </div>
       )}
     </>

@@ -23,6 +23,9 @@ const MaximPage = (props: MaximPageProps) => {
 
   const navigateMaxims = (event: React.KeyboardEvent) => {
     switch (event.keyCode) {
+      case 32:
+        dispatch(fetchMaxim());
+        break;
       case 37:
         dispatch(fetchMaxim('prev'));
         break;
