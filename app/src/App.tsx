@@ -7,6 +7,7 @@ import routes from 'routes/routes';
 import { Header } from 'components/Header';
 import { Modal } from 'components/Modal';
 import { Alert } from 'components/Alert';
+import { AuthForm } from 'components/AuthForm';
 import 'app.scss';
 
 function App() {
@@ -36,7 +37,9 @@ function App() {
             />
             {/* <Route component={routes.invalidPage.component} /> */}
           </Router>
-          <Modal />
+          <Modal>
+            <AuthForm />
+          </Modal>
           {alerts.length ? <Alert alerts={alerts} /> : null}
         </div>
       )}

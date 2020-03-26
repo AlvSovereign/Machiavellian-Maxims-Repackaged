@@ -11,9 +11,11 @@ const Button = ({
   onClick,
   size,
   type,
+  width,
   variant
 }: ButtonProps) => {
   const buttonClasses = clsx(' rounded', {
+    'w-full': width === 'full',
     'px-2 py-1 font-normal': size === 'small',
     'px-4 py-2 font-bold': size === 'regular',
     'bg-red-700 text-white': variant === 'default',
@@ -53,5 +55,6 @@ interface ButtonProps {
   onClick: (event: React.MouseEvent) => void;
   size: 'small' | 'regular';
   type: 'button' | 'submit';
+  width?: 'full';
   variant: 'default' | 'outline';
 }
