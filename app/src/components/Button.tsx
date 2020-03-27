@@ -14,10 +14,10 @@ const Button = ({
   width,
   variant
 }: ButtonProps) => {
-  const buttonClasses = clsx(' rounded', {
+  const buttonClasses = clsx('font-normal rounded', {
     'w-full': width === 'full',
-    'px-2 py-1 font-normal': size === 'small',
-    'px-4 py-2 font-bold': size === 'regular',
+    'px-2 py-1': size === 'small',
+    'px-4 py-2': size === 'regular',
     'bg-red-700 text-white': variant === 'default',
     'bg-transparent border border-red-700 hover:bg-red-200 text-red-700':
       variant === 'outline',
@@ -37,6 +37,7 @@ const Button = ({
             colour={variant === 'default' ? 'white' : 'red'}
             classes={typoClasses}
             component='span'
+            font='sans'
             variant={size === 'small' ? 'small' : 'button'}>
             {children}
           </Typography>

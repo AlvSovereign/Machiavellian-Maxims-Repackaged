@@ -1,8 +1,10 @@
 module.exports = {
   theme: {
-    extend: { zIndex: { '60': 60 } },
-    fontFamily: {
-      serif: ['CalendasPlus']
+    extend: {
+      fontFamily: {
+        serif: ['CalendasPlus']
+      },
+      zIndex: { '60': 60 }
     }
   },
   variants: {},

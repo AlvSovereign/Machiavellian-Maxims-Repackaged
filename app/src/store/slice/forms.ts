@@ -60,7 +60,7 @@ const userRegister = (
       autoDismiss: 5000,
       id: Date.now(),
       message: `Welcome to Machiavellan Maxims!`,
-      type: 'error'
+      type: 'success'
     })
   );
 };

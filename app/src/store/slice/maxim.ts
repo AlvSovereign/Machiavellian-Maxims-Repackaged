@@ -1,14 +1,5 @@
-import {
-  createSlice,
-  PayloadAction,
-  ThunkAction,
-  Action
-} from '@reduxjs/toolkit';
-import API, {
-  MaximsApiSuccessResponse,
-  MaximsApiErrorResponse,
-  MaximsSuccess
-} from '../../services/api';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import API, { MaximsApiErrorResponse, MaximsSuccess } from '../../services/api';
 import { AppThunk } from 'store/store';
 
 const initialState: MaximState = {

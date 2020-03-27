@@ -1,8 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API, { FormSuccess } from 'services/api';
-import { AuthFormCredentials } from 'components/Modal';
-import { AppThunk } from 'store/store';
-import { addAlert } from './alert';
+import { createSlice } from '@reduxjs/toolkit';
+import { FormSuccess } from 'services/api';
 const initialState: MeState = {
   email: '',
   savedMaxims: []

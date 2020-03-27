@@ -6,12 +6,15 @@ const Typography = ({
   classes,
   colour = 'black',
   component = 'p',
+  font,
   href,
+  onClick,
   variant
 }: TypographyProps) => {
   const clsxs = clsx(
-    'font-serif',
     {
+      'font-serif': font === 'serif',
+      'font-sans': font === 'sans',
       'text-gray-900': colour === 'black',
       'text-red-700': colour === 'red',
       'text-white': colour === 'white',
@@ -25,7 +28,11 @@ const Typography = ({
   const Component = component;
 
   return (
-    <Component href={href} target={href && 'blank_'} className={clsxs}>
+    <Component
+      href={href}
+      target={href && 'blank_'}
+      className={clsxs}
+      onClick={onClick}>
       {children}
     </Component>
   );
@@ -33,12 +40,13 @@ const Typography = ({
 
 export { Typography };
 
-interface TypographyProps {
+export interface TypographyProps {
   children: ReactNode;
   colour?: 'red' | 'black' | 'white';
   component: any;
   classes?: string;
+  font: 'sans' | 'serif';
   href?: string;
+  onClick?: () => void;
   variant: 'small' | 'button' | 'title' | 'paragraph';
-  props?: any;
 }

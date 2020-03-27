@@ -13,6 +13,7 @@ const Maxim = ({ data }: MaximProps) => {
           classes='mb-4'
           colour='red'
           component='h2'
+          font='serif'
           variant='title'>{`Maxim #${maximNumber}`}</Typography>
         <MaximMarkdown>{`${maxim}`}</MaximMarkdown>
         <Typography
@@ -20,6 +21,7 @@ const Maxim = ({ data }: MaximProps) => {
           classes='uppercase mb-4'
           colour='red'
           component='a'
+          font='serif'
           variant='paragraph'>
           {'IllimitableMen.com'}
         </Typography>

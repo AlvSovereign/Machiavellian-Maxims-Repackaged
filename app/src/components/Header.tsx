@@ -4,7 +4,7 @@ import { Button } from './Button';
 import { toggleModal } from 'store/slice/app';
 import { RootStateInterface } from 'store/store';
 
-const Header = ({}: HeaderProps) => {
+const Header = () => {
   const dispatch = useDispatch();
   const { showModal } = useSelector((state: RootStateInterface) => state.app);
 
@@ -22,5 +22,3 @@ const Header = ({}: HeaderProps) => {
 };
 
 export { Header };
-
-interface HeaderProps {}

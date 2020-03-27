@@ -15,7 +15,7 @@ const Alert = ({ alerts }: AlertProps) => {
           'bg-red-700': type === 'error'
         },
         {
-          'bg-green-700': type == 'success'
+          'bg-green-700 text-white': type === 'success'
         }
       );
 
@@ -28,7 +28,7 @@ const Alert = ({ alerts }: AlertProps) => {
           <div
             className={clsxs}
             style={{ bottom: index * 55 }}
-            onClick={() => dispatch(removeAlert({ id }))}>
+            onClick={() => dismissable && dispatch(removeAlert({ id }))}>
             {message}
           </div>
         </React.Fragment>

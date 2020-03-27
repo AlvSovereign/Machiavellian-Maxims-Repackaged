@@ -11,6 +11,7 @@ const MaximMarkdown = (props: any) => {
             classes='mb-4'
             colour='black'
             component='blockquote'
+            font='serif'
             variant='paragraph'
             {...props}
           />
@@ -22,6 +23,7 @@ const MaximMarkdown = (props: any) => {
             classes='mb-4'
             colour='black'
             component='blockquote'
+            font='serif'
             variant='paragraph'
             {...props}
           />
@@ -32,6 +34,7 @@ const MaximMarkdown = (props: any) => {
           <Typography
             colour='red'
             component='a'
+            font='serif'
             variant='paragraph'
             {...props}
           />

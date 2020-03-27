@@ -4,12 +4,13 @@ import { userRegister, userSignin } from 'store/slice/forms';
 import { Button } from './Button';
 import { Input } from './Input';
 import { RootStateInterface } from 'store/store';
+import { Typography } from './Typography';
 
-const AuthForm = ({}: AuthFormProps) => {
+const AuthForm = () => {
   const [email, setEmail] = useState<any>('');
   const [password, setPassword] = useState<any>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [formType, setFormType] = useState<'signin' | 'register'>('register');
+  const [formType, setFormType] = useState<'login' | 'register'>('register');
   const dispatch = useDispatch();
   const { errorMessage, errorOccured, isError } = useSelector(
     (state: RootStateInterface) => state.forms.auth
@@ -53,18 +54,23 @@ const AuthForm = ({}: AuthFormProps) => {
         placeholder='******************'
       />
       <div className='flex flex-row items-center justify-between mb-4'>
-        <a
-          className='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
-          href='#'>
+        <Typography
+          classes='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
+          font='sans'
+          component='span'
+          variant='small'>
           Forgot Password?
-        </a>
-        <a
-          className='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
+        </Typography>
+        <Typography
+          classes='inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800'
+          font='sans'
+          component='span'
           onClick={() =>
-            setFormType(formType === 'register' ? 'signin' : 'register')
-          }>
-          {formType === 'register' ? 'Or Sign In?' : 'Or Register?'}
-        </a>
+            setFormType(formType === 'register' ? 'login' : 'register')
+          }
+          variant='small'>
+          {formType === 'register' ? 'Or Login?' : 'Or Register?'}
+        </Typography>
       </div>
       <div className='flex items-center justify-between'>
         <Button
@@ -79,7 +85,7 @@ const AuthForm = ({}: AuthFormProps) => {
             ? '...Loading'
             : formType === 'register'
             ? 'Register'
-            : 'Sign In'}
+            : 'Login'}
         </Button>
       </div>
       <hr />
@@ -88,5 +94,3 @@ const AuthForm = ({}: AuthFormProps) => {
 };
 
 export { AuthForm };
-
-interface AuthFormProps {}

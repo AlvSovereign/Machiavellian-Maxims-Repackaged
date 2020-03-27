@@ -6,7 +6,7 @@ import { MaximError } from 'components/MaximError';
 import { Button } from 'components/Button';
 import { Maxim } from 'components/Maxim';
 
-const MaximPage = (props: MaximPageProps) => {
+const MaximPage = () => {
   const dispatch = useDispatch();
   const { currentMaxim, isError } = useSelector(
     (state: RootStateInterface) => state.maxim
@@ -76,5 +76,3 @@ const MaximPage = (props: MaximPageProps) => {
 };
 
 export { MaximPage };
-
-interface MaximPageProps {}
