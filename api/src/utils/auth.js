@@ -1,4 +1,21 @@
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { User } from '../resources/user/user.model';
+import config from '../config';
+
+const googleStrategy = new GoogleStrategy(
+  {
+    clientID: config.keys.googleClientID,
+    clientSecret: config.keys.googleClientSecret,
+    callbackURL: 'http://www.example.com/auth/google/callback'
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function(err, user) {
+      return cb(err, user);
+    });
+  }
+);
+
+const googleAuth = async (req, res, next) => {};
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -81,4 +98,4 @@ const signin = async (req, res, next) => {
   }
 };
 
-export { signin, signup };
+export { googleAuth, googleStrategy, signin, signup };

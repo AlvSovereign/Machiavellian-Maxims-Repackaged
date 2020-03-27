@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 import { json, urlencoded } from 'body-parser';
 import morgan from 'morgan';
 import cors from 'cors';
+import passport from 'passport';
 import config from './config';
 import maximRouter from './resources/maxim/maxim.router';
-import { signin, signup } from './utils/auth';
+import { googleAuth, googleStrategy, signin, signup } from './utils/auth';
 import { logErrors } from './utils/logErrors';
 import { genericErrorHandler } from './utils/genericErrorHandler';
 
@@ -19,6 +20,12 @@ app.use(morgan('dev'));
 
 app.post('/signup', signup);
 app.post('/signin', signin);
+passport.use(googleStrategy);
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] }),
+  googleAuth
+);
 app.use('/maxim', maximRouter);
 app.use(logErrors);
 app.use(genericErrorHandler);

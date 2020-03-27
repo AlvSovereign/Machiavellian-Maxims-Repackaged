@@ -20,7 +20,13 @@ const userSchema = new mongoose.Schema(
       }
     },
     facebook: {
-      id: { type: String },
+      facebookId: { type: String },
+      token: { type: String },
+      email: { type: String },
+      name: { type: String }
+    },
+    google: {
+      googleId: { type: String },
       token: { type: String },
       email: { type: String },
       name: { type: String }

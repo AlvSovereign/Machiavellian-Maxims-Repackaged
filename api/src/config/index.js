@@ -1,4 +1,6 @@
 import { merge } from 'lodash';
+import { devConfig } from './dev';
+
 const env = process.env.NODE_ENV || 'development';
 
 const baseConfig = {
@@ -13,7 +15,7 @@ let envConfig = {};
 switch (env) {
   case 'dev':
   case 'development':
-    envConfig = require('./dev').config;
+    envConfig = devConfig;
     break;
   case 'test':
   case 'testing':

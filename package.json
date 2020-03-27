@@ -8,7 +8,7 @@
     "build": "babel api/src --out-dir api/dist",
     "start:dev": "nodemon --exec npm run restart",
     "restart": "rimraf api/dist && npm run build && npm run start:api",
-    "start:api": "node api/dist/index.js",
+    "start:api": "node -r dotenv/config api/dist/index.js dotenv_config_path=.env",
     "start:app": "cd app && npm run start"
   },
   "keywords": [
@@ -33,12 +33,14 @@
     "body-parser": "^1.19.0",
     "clsx": "^1.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "markdown-to-jsx": "^6.11.0",
     "mongoose": "^5.9.3",
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "react-markdown": "^4.3.1",
     "redis": "^3.0.2",
