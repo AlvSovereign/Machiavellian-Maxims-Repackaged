@@ -13,6 +13,9 @@ const Alert = ({ alerts }: AlertProps) => {
         'absolute right-0 m-4 px-4 py-2 rounded max-w-sm z-60',
         {
           'bg-red-700': type === 'error'
+        },
+        {
+          'bg-green-700': type == 'success'
         }
       );
 

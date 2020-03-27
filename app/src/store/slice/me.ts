@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API from 'services/api';
-import { SigninCredentials } from 'components/Modal';
+import API, { FormSuccess } from 'services/api';
+import { AuthFormCredentials } from 'components/Modal';
 import { AppThunk } from 'store/store';
 import { addAlert } from './alert';
 const initialState: MeState = {
@@ -19,7 +19,4 @@ const meSlice = createSlice({
 export const { addMe } = meSlice.actions;
 export default meSlice.reducer;
 
-export interface MeState {
-  email: string;
-  savedMaxims: string[];
-}
+export interface MeState extends FormSuccess {}

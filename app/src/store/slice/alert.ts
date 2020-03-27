@@ -30,7 +30,7 @@ export interface AlertInterface {
   dismissable?: boolean;
   id: number;
   message?: string;
-  type?: 'error';
+  type?: 'error' | 'success';
 }
 
 export interface AlertState {

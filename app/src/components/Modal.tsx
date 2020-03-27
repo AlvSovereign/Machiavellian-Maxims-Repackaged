@@ -37,7 +37,7 @@ interface ModalProps {
   children: ReactNode;
 }
 
-export interface SigninCredentials {
+export interface AuthFormCredentials {
   email: string;
   password: string;
 }

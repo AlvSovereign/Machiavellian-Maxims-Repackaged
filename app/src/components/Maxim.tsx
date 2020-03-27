@@ -1,10 +1,10 @@
 import React from 'react';
-import { MaximInterface } from 'store/slice/maxim';
+import { MaximsSuccess } from 'services/api';
 import { Typography } from './Typography';
 import { MaximMarkdown } from './Markdown';
 
 const Maxim = ({ data }: MaximProps) => {
-  const { maxim, maximNumber }: MaximInterface = data;
+  const { maxim, maximNumber }: MaximsSuccess = data;
 
   return (
     <div className='container mx-auto'>
@@ -31,5 +31,5 @@ const Maxim = ({ data }: MaximProps) => {
 export { Maxim };
 
 interface MaximProps {
-  data: MaximInterface;
+  data: MaximsSuccess;
 }

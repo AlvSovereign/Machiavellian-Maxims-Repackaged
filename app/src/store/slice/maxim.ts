@@ -4,7 +4,11 @@ import {
   ThunkAction,
   Action
 } from '@reduxjs/toolkit';
-import API from '../../services/api';
+import API, {
+  MaximsApiSuccessResponse,
+  MaximsApiErrorResponse,
+  MaximsSuccess
+} from '../../services/api';
 import { AppThunk } from 'store/store';
 
 const initialState: MaximState = {
@@ -55,10 +59,11 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
   }
 
   // otherwise fetch maxim from DB
-  const response = await API().fetchMaxim(maximNumber);
+  const response: MaximsSuccess &
+    MaximsApiErrorResponse = await API().fetchMaxim(maximNumber);
 
-  if (response.errorMessage) {
-    dispatch(errorFetchingMaxim(response.errorMessage));
+  if (response.status === 500) {
+    dispatch(errorFetchingMaxim(response.message));
     return;
   }
 
@@ -73,7 +78,7 @@ const maximSlice = createSlice({
       reducer: (state, action: PayloadAction<any>) => {
         return { ...state, ...action.payload, isError: false };
       },
-      prepare: (fetchedMaxim: MaximInterface) => {
+      prepare: (fetchedMaxim: MaximsSuccess) => {
         const { _id, maxim, maximNumber } = fetchedMaxim;
 
         return {
@@ -89,7 +94,7 @@ const maximSlice = createSlice({
         };
       }
     },
-    currentMaxim: (state, action: PayloadAction<MaximInterface>) => {
+    currentMaxim: (state, action: PayloadAction<MaximsSuccess>) => {
       return (state = { ...state, ...action.payload, isError: false });
     },
     errorFetchingMaxim: (state, action: PayloadAction<string>) => {
@@ -107,7 +112,7 @@ export const { errorFetchingMaxim, getMaxim } = maximSlice.actions;
 export default maximSlice.reducer;
 
 export interface MaximState {
-  currentMaxim: MaximInterface;
+  currentMaxim: MaximsSuccess;
   [maximNumber: number]: any;
   isError: boolean;
   errorMessage: string;
@@ -116,10 +121,4 @@ export interface MaximState {
 export interface StoredMaxim {
   _id: string;
   maxim: string;
-}
-
-export interface MaximInterface {
-  _id: string;
-  maxim: string;
-  maximNumber: number;
 }
