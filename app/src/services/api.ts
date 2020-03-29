@@ -32,7 +32,7 @@ const API = () => {
     register: async (credentials: AuthFormCredentials) => {
       try {
         const response: FormsApiSuccessResponse = await axiosInstance.post(
-          '/signup',
+          '/auth/signup',
           credentials
         );
 

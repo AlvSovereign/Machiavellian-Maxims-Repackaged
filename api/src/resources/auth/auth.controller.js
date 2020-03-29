@@ -8,7 +8,6 @@ const userSession = user => ({
 
 const controllers = {
   signIn: async (req, res, next) => {
-    console.log('req: ', req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
