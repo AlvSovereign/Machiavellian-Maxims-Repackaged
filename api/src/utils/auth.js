@@ -1,21 +1,9 @@
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { User } from '../resources/user/user.model';
-import config from '../config';
 
-const googleStrategy = new GoogleStrategy(
-  {
-    clientID: config.keys.googleClientID,
-    clientSecret: config.keys.googleClientSecret,
-    callbackURL: 'http://www.example.com/auth/google/callback'
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function(err, user) {
-      return cb(err, user);
-    });
-  }
-);
-
-const googleAuth = async (req, res, next) => {};
+const googleAuth = async (req, res, next) => {
+  console.log('req: ', req);
+  console.log('res: ', res);
+};
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -85,10 +73,12 @@ const signin = async (req, res, next) => {
       });
     }
 
-    const { local, savedMaxims } = userExists;
-    const { email } = local;
+    const { savedMaxims } = userExists;
+    const sessionizedUser = userSession(userExists);
 
-    return res.status(201).send({ email, savedMaxims });
+    req.session.user = sessionizedUser;
+    console.log('req.session: ', req.session);
+    return res.status(201).send({ user: sessionizedUser, savedMaxims });
   } catch (err) {
     return next({
       status: 400,
@@ -98,4 +88,4 @@ const signin = async (req, res, next) => {
   }
 };
 
-export { googleAuth, googleStrategy, signin, signup };
+export { googleAuth, signin, signup };

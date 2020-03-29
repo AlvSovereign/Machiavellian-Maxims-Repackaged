@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userRegister, userSignin } from 'store/slice/forms';
+import {
+  googleSignin,
+  twitterSignin,
+  userRegister,
+  userSignin
+} from 'store/slice/forms';
 import { Button } from './Button';
 import { Input } from './Input';
 import { RootStateInterface } from 'store/store';
@@ -86,6 +91,28 @@ const AuthForm = () => {
             : formType === 'register'
             ? 'Register'
             : 'Login'}
+        </Button>
+      </div>
+      <div className='flex items-center justify-between'>
+        <Button
+          isLoading={loading}
+          onClick={() => dispatch(googleSignin())}
+          size='regular'
+          type='button'
+          width='full'
+          variant='default'>
+          {'Continue with Google'}
+        </Button>
+      </div>
+      <div className='flex items-center justify-between'>
+        <Button
+          isLoading={loading}
+          onClick={() => dispatch(twitterSignin())}
+          size='regular'
+          type='button'
+          width='full'
+          variant='default'>
+          {'Continue with Twitter'}
         </Button>
       </div>
       <hr />

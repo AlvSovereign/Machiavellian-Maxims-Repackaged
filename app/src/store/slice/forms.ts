@@ -41,6 +41,16 @@ const handleErrors = (
   );
 };
 
+const googleSignin = (): AppThunk => async dispatch => {
+  const response = await API().googleSignin();
+  console.log('response: ', response);
+};
+
+const twitterSignin = (): AppThunk => async dispatch => {
+  const response = await API().twitterSignin();
+  console.log('response: ', response);
+};
+
 const userRegister = (
   credentials: AuthFormCredentials
 ): AppThunk => async dispatch => {
@@ -100,7 +110,7 @@ const formsSlice = createSlice({
   }
 });
 
-export { userRegister, userSignin };
+export { googleSignin, twitterSignin, userRegister, userSignin };
 export const { clearErrors, signinError } = formsSlice.actions;
 export default formsSlice.reducer;
 

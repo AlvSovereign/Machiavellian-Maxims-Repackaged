@@ -17,6 +17,18 @@ const API = () => {
         return error.response.data;
       }
     },
+    googleSignin: async () => {
+      try {
+        const response: MaximsApiSuccessResponse = await axiosInstance.get(
+          '/auth/google'
+        );
+        console.log('response: ', response);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return error.response.data;
+      }
+    },
     register: async (credentials: AuthFormCredentials) => {
       try {
         const response: FormsApiSuccessResponse = await axiosInstance.post(
@@ -33,7 +45,7 @@ const API = () => {
     signin: async (credentials: AuthFormCredentials) => {
       try {
         const response: FormsApiSuccessResponse = await axiosInstance.post(
-          '/signin',
+          '/auth/signin',
           credentials
         );
 
@@ -41,6 +53,18 @@ const API = () => {
       } catch (error) {
         console.error(error);
         return error.response.data;
+      }
+    },
+    twitterSignin: async () => {
+      try {
+        const response: MaximsApiSuccessResponse = await axiosInstance.get(
+          '/auth/twitter'
+        );
+        console.log('response: ', response);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return error;
       }
     }
   };
