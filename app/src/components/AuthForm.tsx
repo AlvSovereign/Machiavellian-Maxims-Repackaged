@@ -4,7 +4,7 @@ import {
   googleSignin,
   twitterSignin,
   userRegister,
-  userSignin
+  userSignIn
 } from 'store/slice/forms';
 import { Button } from './Button';
 import { Input } from './Input';
@@ -26,7 +26,7 @@ const AuthForm = () => {
     if (formType === 'register') {
       dispatch(userRegister({ email, password }));
     } else {
-      dispatch(userSignin({ email, password }));
+      dispatch(userSignIn({ email, password }));
     }
   };
 

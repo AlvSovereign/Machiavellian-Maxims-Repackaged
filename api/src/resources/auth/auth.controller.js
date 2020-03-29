@@ -39,12 +39,12 @@ const controllers = {
         });
       }
 
-      const { savedMaxims } = userExists;
+      const { local, savedMaxims } = userExists;
       const sessionizedUser = userSession(userExists);
 
       req.session.user = sessionizedUser;
 
-      return res.status(201).send({ user: sessionizedUser, savedMaxims });
+      return res.status(201).send({ email: local.email, savedMaxims });
     } catch (err) {
       return next({
         status: 400,

@@ -1,12 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import API, {
-  FormsApiErrorResponse,
-  FormsApiSuccessResponse
-} from 'services/api';
+import API, { FormsApiErrorResponse, FormSuccess } from 'services/api';
 import { AuthFormCredentials } from 'components/Modal';
 import { AppThunk } from 'store/store';
 import { addAlert } from './alert';
-import { addMe } from './me';
+import { addMe, removeMe } from './me';
 import { toggleModal } from './app';
 
 const initialState: FormsState = {
@@ -18,7 +15,7 @@ const initialState: FormsState = {
 };
 
 const handleErrors = (
-  response: FormsApiSuccessResponse & FormsApiErrorResponse,
+  response: FormSuccess & FormsApiErrorResponse,
   dispatch: any
 ) => {
   const { message, inputName } = response;
@@ -56,14 +53,17 @@ const userRegister = (
 ): AppThunk => async dispatch => {
   dispatch(clearErrors());
 
-  const response: FormsApiSuccessResponse &
-    FormsApiErrorResponse = await API().register(credentials);
+  const response: FormSuccess & FormsApiErrorResponse = await API().register(
+    credentials
+  );
+  console.log('response: ', response);
+
   if (response.status === 401) {
     handleErrors(response, dispatch);
     return;
   }
 
-  dispatch(addMe(response));
+  dispatch(addMe({ ...response }));
   dispatch(toggleModal({ showModal: false }));
   dispatch(
     addAlert({
@@ -75,26 +75,43 @@ const userRegister = (
   );
 };
 
-const userSignin = (
+const userSignIn = (
   credentials: AuthFormCredentials
 ): AppThunk => async dispatch => {
   dispatch(clearErrors());
 
-  const response: FormsApiSuccessResponse &
-    FormsApiErrorResponse = await API().signin(credentials);
+  const response: FormSuccess & FormsApiErrorResponse = await API().signin(
+    credentials
+  );
 
   if (response.status === 401) {
     handleErrors(response, dispatch);
     return;
   }
 
-  dispatch(addMe(response));
+  dispatch(addMe({ ...response }));
   dispatch(toggleModal({ showModal: false }));
   dispatch(
     addAlert({
       autoDismiss: 5000,
       id: Date.now(),
       message: `Welcome back!!`,
+      type: 'success'
+    })
+  );
+};
+
+const userSignOut = (): AppThunk => async dispatch => {
+  dispatch(clearErrors());
+
+  const response: FormSuccess & FormsApiErrorResponse = await API().signout();
+  console.log('response: ', response);
+  dispatch(removeMe());
+  dispatch(
+    addAlert({
+      autoDismiss: 5000,
+      id: Date.now(),
+      message: `Successfully Signed Out`,
       type: 'success'
     })
   );
@@ -110,7 +127,7 @@ const formsSlice = createSlice({
   }
 });
 
-export { googleSignin, twitterSignin, userRegister, userSignin };
+export { googleSignin, twitterSignin, userRegister, userSignIn, userSignOut };
 export const { clearErrors, signinError } = formsSlice.actions;
 export default formsSlice.reducer;
 

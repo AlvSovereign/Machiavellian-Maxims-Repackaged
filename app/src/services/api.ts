@@ -55,12 +55,22 @@ const API = () => {
         return error.response.data;
       }
     },
+    signout: async () => {
+      try {
+        const response: MaximsApiSuccessResponse = await axiosInstance.get(
+          '/auth/signout'
+        );
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return error;
+      }
+    },
     twitterSignin: async () => {
       try {
         const response: MaximsApiSuccessResponse = await axiosInstance.get(
           '/auth/twitter'
         );
-        console.log('response: ', response);
         return response.data;
       } catch (error) {
         console.error(error);
