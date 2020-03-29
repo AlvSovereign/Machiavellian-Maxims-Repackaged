@@ -10,10 +10,8 @@ import config from './config';
 import maximRouter from './resources/maxim/maxim.router';
 import authRouter from './resources/auth/auth.router';
 import initOauth from './resources/auth/oauth.init';
-import { signin, signup } from './utils/auth';
 import { logErrors } from './utils/logErrors';
 import { genericErrorHandler } from './utils/genericErrorHandler';
-import { redisClient } from './cache';
 
 const connect = (url, config) => mongoose.connect(url, config);
 
@@ -52,12 +50,11 @@ export const start = async () => {
     app.use(passport.session());
     initOauth();
 
-    app.post('/signup', signup);
     app.use('/auth', authRouter);
     app.use('/maxim', maximRouter);
 
     app.use(logErrors);
-    // app.use(genericErrorHandler);
+    app.use(genericErrorHandler);
     app.listen(config.port, () => {
       console.log(`REST API on http://localhost:${config.port}`);
     });

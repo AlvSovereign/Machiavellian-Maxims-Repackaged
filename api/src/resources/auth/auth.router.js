@@ -3,15 +3,17 @@ import passport from 'passport';
 import controllers from './auth.controller';
 
 const router = Router();
-const twitterAuth = passport.authenticate('twitter');
 const googleAuth = passport.authenticate('google', {
   scope: ['profile'],
   session: false
 });
+const twitterAuth = passport.authenticate('twitter');
 const facebookAuth = passport.authenticate('facebook');
 
 router.post('/signin', controllers.signIn);
-router.get('/signout', controllers.signOut);
+router.post('/signup', controllers.signup);
+router.delete('/signout', controllers.signOut);
+
 router.get('/twitter', twitterAuth);
 router.get('/google', googleAuth);
 

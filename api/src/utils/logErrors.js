@@ -1,5 +1,5 @@
 const logErrors = (err, req, res, next) => {
-  console.error(err);
+  console.error(err.err || err.message);
   next(err);
 };
 
