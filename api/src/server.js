@@ -7,8 +7,9 @@ import passport from 'passport';
 import session from 'express-session';
 import connectStore from 'connect-mongo';
 import config from './config';
-import maximRouter from './resources/maxim/maxim.router';
 import authRouter from './resources/auth/auth.router';
+import maximRouter from './resources/maxim/maxim.router';
+import userRouter from './resources/user/user.router';
 import initOauth from './resources/auth/oauth.init';
 import { logErrors } from './utils/logErrors';
 import { genericErrorHandler } from './utils/genericErrorHandler';
@@ -52,6 +53,7 @@ export const start = async () => {
 
     app.use('/auth', authRouter);
     app.use('/maxim', maximRouter);
+    app.use('/user', userRouter);
 
     app.use(logErrors);
     app.use(genericErrorHandler);

@@ -42,9 +42,22 @@ const API = () => {
         return error.response.data;
       }
     },
+    updateMaxims: async (payload: SaveMaximPayload) => {
+      try {
+        const response: MaximsApiSuccessResponse = await axiosInstance.post(
+          '/user/updatemaxims',
+          payload
+        );
+
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return error.response.data;
+      }
+    },
     signin: async (credentials: AuthFormCredentials) => {
       try {
-        const response: FormsApiSuccessResponse = await axiosInstance.post(
+        const response: AuthApiSuccessResponse = await axiosInstance.post(
           '/auth/signin',
           credentials
         );
@@ -108,6 +121,14 @@ export interface FormsApiSuccessResponse {
 }
 
 export interface FormSuccess {
+  id: number;
   email: string;
   savedMaxims: string[];
+}
+
+export interface AuthApiSuccessResponse extends FormsApiSuccessResponse {}
+
+interface SaveMaximPayload {
+  userId: string;
+  maxims: string[];
 }

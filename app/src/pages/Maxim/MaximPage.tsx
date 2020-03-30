@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMaxim } from 'store/slice/maxim';
+import { savedMaximsToUpdate, fetchMaxim } from 'store/slice/maxim';
 import { RootStateInterface } from 'store/store';
 import { MaximError } from 'components/MaximError';
 import { Button } from 'components/Button';
@@ -10,6 +10,9 @@ const MaximPage = () => {
   const dispatch = useDispatch();
   const { currentMaxim, isError } = useSelector(
     (state: RootStateInterface) => state.maxim
+  );
+  const { email, savedMaxims } = useSelector(
+    (state: RootStateInterface) => state.me
   );
   const focusDiv: any = useRef(null);
 
@@ -21,8 +24,16 @@ const MaximPage = () => {
     focusDiv.current && focusDiv.current.focus();
   }, []);
 
+  const isSaved = savedMaxims.includes(currentMaxim._id);
+  const userLoggedIn = !!email;
+
   const navigateMaxims = (event: React.KeyboardEvent) => {
     switch (event.keyCode) {
+      case 13:
+        savedMaxims.includes(currentMaxim._id)
+          ? updateSavedMaxims(currentMaxim._id, 'unsave')
+          : updateSavedMaxims(currentMaxim._id, 'save');
+        break;
       case 32:
         dispatch(fetchMaxim());
         break;
@@ -35,6 +46,17 @@ const MaximPage = () => {
     }
   };
 
+  const updateSavedMaxims = (maximId: string, type: 'save' | 'unsave') => {
+    const isMatch = savedMaxims.includes(maximId);
+
+    type === 'save'
+      ? !isMatch && dispatch(savedMaximsToUpdate([...savedMaxims, maximId]))
+      : isMatch &&
+        dispatch(
+          savedMaximsToUpdate(savedMaxims.filter(maxim => maxim !== maximId))
+        );
+  };
+
   return (
     <div
       ref={focusDiv}
@@ -44,7 +66,11 @@ const MaximPage = () => {
       {isError || currentMaxim.maximNumber === 0 ? (
         <MaximError />
       ) : (
-        <Maxim data={currentMaxim} />
+        <Maxim
+          data={{ ...currentMaxim, isSaved }}
+          updateSavedMaxims={savedMaxims && updateSavedMaxims}
+          userLoggedIn={userLoggedIn}
+        />
       )}
       <div
         className='mx-auto flex flex-row items-center justify-around'

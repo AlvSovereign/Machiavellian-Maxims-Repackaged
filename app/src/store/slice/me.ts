@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FormSuccess } from 'services/api';
+import { FormSuccess, MaximsSuccess } from 'services/api';
+
 const initialState: MeState = {
+  id: 0,
   email: '',
   savedMaxims: []
 };
@@ -11,11 +13,14 @@ const meSlice = createSlice({
   reducers: {
     addMe: (state, action: PayloadAction<MeState>) =>
       (state = { ...state, ...action.payload }),
-    removeMe: state => initialState
+    removeMe: state => initialState,
+    updateMaxims: (state, action: PayloadAction<MaximsSuccess>) => {
+      return (state = { ...state, ...action.payload });
+    }
   }
 });
 
-export const { addMe, removeMe } = meSlice.actions;
+export const { addMe, removeMe, updateMaxims } = meSlice.actions;
 export default meSlice.reducer;
 
 export interface MeState extends FormSuccess {}

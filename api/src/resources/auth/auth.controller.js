@@ -2,7 +2,7 @@ import { User } from '../user/user.model';
 import config from '../../config';
 
 const userSession = user => ({
-  userId: user.id,
+  id: user.id,
   email: user.local.email || ''
 });
 
@@ -44,7 +44,7 @@ const controllers = {
 
       req.session.user = sessionizedUser;
 
-      return res.status(201).send({ email: local.email, savedMaxims });
+      return res.status(201).send({ ...sessionizedUser, savedMaxims });
     } catch (err) {
       return next({
         status: 400,
@@ -108,12 +108,12 @@ const controllers = {
 
     try {
       const { email, password } = req.body;
-      const { local, savedMaxims } = await User.create({
+      const { savedMaxims } = await User.create({
         'local.email': email,
         'local.password': password
       });
 
-      return res.status(201).send({ email: local.email, savedMaxims });
+      return res.status(201).send({ ...sessionizedUser, savedMaxims });
     } catch (err) {
       return next({
         status: 400,

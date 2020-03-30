@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API, { MaximsApiErrorResponse, MaximsSuccess } from '../../services/api';
+import { updateMaxims } from './me';
 import { AppThunk } from 'store/store';
 
 const initialState: MaximState = {
@@ -61,6 +62,22 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
   dispatch(getMaxim({ ...response }));
 };
 
+const savedMaximsToUpdate = (maxims: string[]): AppThunk => async (
+  dispatch,
+  getState
+) => {
+  const userId: string = getState().me.id;
+  const response: MaximsSuccess &
+    MaximsApiErrorResponse = await API().updateMaxims({ userId, maxims });
+
+  if (response.status === 500) {
+    dispatch(errorFetchingMaxim(response.message));
+    return;
+  }
+
+  dispatch(updateMaxims({ ...response }));
+};
+
 const maximSlice = createSlice({
   name: 'maxim',
   initialState,
@@ -98,7 +115,7 @@ const maximSlice = createSlice({
   }
 });
 
-export { fetchMaxim };
+export { fetchMaxim, savedMaximsToUpdate };
 export const { errorFetchingMaxim, getMaxim } = maximSlice.actions;
 export default maximSlice.reducer;
 

@@ -3,6 +3,6 @@ import controllers from './user.controller';
 
 const router = Router();
 
-router.route('/').get(controllers.userUser);
+router.route('/updatemaxims').post(controllers.updateMaxims);
 
 export default router;
