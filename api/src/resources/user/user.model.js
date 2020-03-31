@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
       name: { type: String }
     },
     savedMaxims: {
-      type: [mongoose.SchemaTypes.ObjectId],
+      type: [Number],
       ref: 'maxim'
     }
   },

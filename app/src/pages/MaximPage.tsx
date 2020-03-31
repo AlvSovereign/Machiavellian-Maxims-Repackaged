@@ -24,15 +24,15 @@ const MaximPage = () => {
     focusDiv.current && focusDiv.current.focus();
   }, []);
 
-  const isSaved = savedMaxims.includes(currentMaxim._id);
+  const isSaved = savedMaxims.includes(currentMaxim.maximNumber);
   const userLoggedIn = !!email;
 
   const navigateMaxims = (event: React.KeyboardEvent) => {
     switch (event.keyCode) {
       case 13:
-        savedMaxims.includes(currentMaxim._id)
-          ? updateSavedMaxims(currentMaxim._id, 'unsave')
-          : updateSavedMaxims(currentMaxim._id, 'save');
+        savedMaxims.includes(currentMaxim.maximNumber)
+          ? updateSavedMaxims(currentMaxim.maximNumber, 'unsave')
+          : updateSavedMaxims(currentMaxim.maximNumber, 'save');
         break;
       case 32:
         dispatch(fetchMaxim());
@@ -46,14 +46,16 @@ const MaximPage = () => {
     }
   };
 
-  const updateSavedMaxims = (maximId: string, type: 'save' | 'unsave') => {
-    const isMatch = savedMaxims.includes(maximId);
+  const updateSavedMaxims = (maximNumber: number, type: 'save' | 'unsave') => {
+    const isMatch = savedMaxims.includes(maximNumber);
 
     type === 'save'
-      ? !isMatch && dispatch(savedMaximsToUpdate([...savedMaxims, maximId]))
+      ? !isMatch && dispatch(savedMaximsToUpdate([...savedMaxims, maximNumber]))
       : isMatch &&
         dispatch(
-          savedMaximsToUpdate(savedMaxims.filter(maxim => maxim !== maximId))
+          savedMaximsToUpdate(
+            savedMaxims.filter(maxim => maxim !== maximNumber)
+          )
         );
   };
 

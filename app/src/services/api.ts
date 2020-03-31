@@ -6,6 +6,18 @@ const API = () => {
   const axiosInstance = axios.create({ baseURL });
 
   return {
+    bulkFetchMaxims: async (maxims: number[]) => {
+      try {
+        const response: MaximsApiSuccessResponse = await axiosInstance.post(
+          '/maxim/getMaxims',
+          maxims
+        );
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return error.response.data;
+      }
+    },
     fetchMaxim: async (maximNumber: number) => {
       try {
         const response: MaximsApiSuccessResponse = await axiosInstance.get(
@@ -123,12 +135,12 @@ export interface FormsApiSuccessResponse {
 export interface FormSuccess {
   id: number;
   email: string;
-  savedMaxims: string[];
+  savedMaxims: number[];
 }
 
 export interface AuthApiSuccessResponse extends FormsApiSuccessResponse {}
 
 interface SaveMaximPayload {
   userId: string;
-  maxims: string[];
+  maxims: number[];
 }

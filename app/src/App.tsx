@@ -28,12 +28,17 @@ function App() {
     <>
       {fontReady && (
         <div className='App'>
-          <Header />
           <Router>
+            <Header />
             <Route
               exact
               path={routes.maxim.path}
               component={routes.maxim.component}
+            />
+            <Route
+              exact
+              path={routes.userProfile.path}
+              component={routes.userProfile.component}
             />
             {/* <Route component={routes.invalidPage.component} /> */}
           </Router>

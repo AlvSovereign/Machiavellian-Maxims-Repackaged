@@ -56,7 +56,6 @@ const userRegister = (
   const response: FormSuccess & FormsApiErrorResponse = await API().register(
     credentials
   );
-  console.log('response: ', response);
 
   if (response.status === 401) {
     handleErrors(response, dispatch);
@@ -105,7 +104,7 @@ const userSignOut = (): AppThunk => async dispatch => {
   dispatch(clearErrors());
 
   const response: FormSuccess & FormsApiErrorResponse = await API().signout();
-  console.log('response: ', response);
+
   dispatch(removeMe());
   dispatch(
     addAlert({

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import API, { MaximsApiErrorResponse, MaximsSuccess } from '../../services/api';
-import { updateMaxims } from './me';
+import { updateMaxims, MeState } from './me';
 import { AppThunk } from 'store/store';
 
 const initialState: MaximState = {
@@ -62,7 +62,22 @@ const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
   dispatch(getMaxim({ ...response }));
 };
 
-const savedMaximsToUpdate = (maxims: string[]): AppThunk => async (
+const getSavedMaxims = (): AppThunk => async (dispatch, getState) => {
+  const savedMaxims: number[] = getState().me.savedMaxims;
+  const maximsFromState: StoredMaxim[] = getState().maxim;
+  const maximsForBulkFetch: number[] = [];
+  const retrievedMaximsFromState: StoredMaxim[] = savedMaxims.map(
+    (maxim: number) => maximsFromState[maxim] || maximsForBulkFetch.push(maxim)
+  );
+
+  const response = maximsForBulkFetch.length
+    ? await API().bulkFetchMaxims(maximsForBulkFetch)
+    : [];
+
+  const mergedMaxims = [...retrievedMaximsFromState, ...response];
+};
+
+const savedMaximsToUpdate = (maxims: number[]): AppThunk => async (
   dispatch,
   getState
 ) => {
@@ -115,7 +130,7 @@ const maximSlice = createSlice({
   }
 });
 
-export { fetchMaxim, savedMaximsToUpdate };
+export { fetchMaxim, getSavedMaxims, savedMaximsToUpdate };
 export const { errorFetchingMaxim, getMaxim } = maximSlice.actions;
 export default maximSlice.reducer;
 

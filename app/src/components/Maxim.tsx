@@ -11,11 +11,20 @@ const Maxim = ({ data, updateSavedMaxims, userLoggedIn }: MaximProps) => {
     <div className='container mx-auto'>
       <div className='flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center'>
         {userLoggedIn && (
-          <div className='self-end'>
+          <div className='self-end cursor-pointer'>
             {isSaved ? (
-              <Bookmark onClick={() => updateSavedMaxims(_id, 'unsave')} />
+              <Bookmark
+                height={36}
+                isSelected={true}
+                width={36}
+                onClick={() => updateSavedMaxims(maximNumber, 'unsave')}
+              />
             ) : (
-              <BookmarkOutline onClick={() => updateSavedMaxims(_id, 'save')} />
+              <BookmarkOutline
+                height={36}
+                width={36}
+                onClick={() => updateSavedMaxims(maximNumber, 'save')}
+              />
             )}
           </div>
         )}
@@ -44,7 +53,7 @@ export { Maxim };
 
 interface MaximProps {
   data: MaximsSuccess & IsSaved;
-  updateSavedMaxims: (maxim: string, type: 'save' | 'unsave') => void;
+  updateSavedMaxims: (maxim: number, type: 'save' | 'unsave') => void;
   userLoggedIn: boolean;
 }
 

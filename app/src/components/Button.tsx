@@ -57,5 +57,5 @@ interface ButtonProps {
   size: 'small' | 'regular';
   type: 'button' | 'submit';
   width?: 'full';
-  variant: 'default' | 'outline';
+  variant: 'default' | 'outline' | 'plain';
 }
