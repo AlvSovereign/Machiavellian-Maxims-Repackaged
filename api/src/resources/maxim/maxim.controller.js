@@ -1,11 +1,21 @@
 import { Maxim } from './maxim.model';
-import { getMaximFromRedis, setMaximInRedis } from '../../cache';
+import {
+  getMaxim,
+  getMultipleMaxims,
+  setMaximInCache,
+  setMultipleMaximsInCache
+} from '../../cache';
 
 const checkRedisCache = async (key, next) => {
   try {
-    const cachedMaxim = await getMaximFromRedis(key);
-    if (cachedMaxim) {
-      return JSON.parse(cachedMaxim);
+    let cachedData;
+    if (Array.isArray(key)) {
+      cachedData = await getMultipleMaxims(key);
+      return cachedData.map(data => JSON.parse(data));
+    } else {
+      cachedData = await getMaxim(key);
+      console.log('cachedData: ', cachedData);
+      return JSON.parse(cachedData);
     }
   } catch (err) {
     return next({
@@ -32,7 +42,7 @@ const controllers = {
         .lean()
         .exec();
       // then save result to redis cache
-      setMaximInRedis(maximNumber, 3600, JSON.stringify(fetchedMaxim));
+      await setMaximInCache(maximNumber, JSON.stringify(fetchedMaxim));
 
       res.status(200).json({ data: fetchedMaxim });
     } catch (err) {
@@ -46,18 +56,33 @@ const controllers = {
   getMaxims: async (req, res, next) => {
     const { maxims } = req.body;
     const maximsFromCache = await checkRedisCache(maxims, next);
-    console.log('maximsFromCache: ', maximsFromCache);
+
     try {
+      // where maxims arent in cache (returned as null), go fetch from DB
+      const batchMaximsToFetchFromDB = await maximsFromCache.reduce(
+        (acc, curr, index, arr) => {
+          return curr === null ? [...acc, maxims[index]] : acc;
+        },
+        []
+      );
       const response = await Maxim.find()
         .where('maximNumber')
-        .in(maxims)
+        .in(batchMaximsToFetchFromDB)
         .lean()
         .exec();
-      res.status(200).send({ ...response });
+
+      const maximsToBeCached = await response.forEach(item =>
+        setMaximInCache(item.maximNumber, JSON.stringify(item))
+      ); //yuck - need to know how to mset in redis
+
+      const thing = await setMultipleMaximsInCache(maximsToBeCached);
+      console.log('thing: ', thing);
+
+      res.status(200).send({ ...maximsFromCache, ...response });
     } catch (err) {
       return next({
         error: err,
-        message: 'Error fetching Maxim. Please try again',
+        message: 'Error fetching Maxims. Please try again',
         status: 500
       });
     }
