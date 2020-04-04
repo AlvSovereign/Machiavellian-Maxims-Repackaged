@@ -1,26 +1,22 @@
-import React from 'react';
-import { Typography } from './Typography';
-import { MaximMarkdown } from './Markdown';
-import { MaximsSuccess } from 'services/api';
+import React, { ReactNode } from 'react';
 
-const Card = ({ maxim, maximNumber }: CardProps) => {
+const Card = ({ content, onClick, title }: CardProps) => {
   return (
-    <div className='max-w-sm rounded overflow-hidden shadow-lg'>
-      <div className='px-6 py-4'>
-        <Typography
-          classes='mb-4'
-          colour='red'
-          component='h4'
-          font='serif'
-          variant='title'>
-          {`Maxim #${maximNumber}`}
-        </Typography>
-        <MaximMarkdown>{`${maxim}`}</MaximMarkdown>
-      </div>
+    <div
+      className='max-w-sm rounded px-6 py-4 bg-white overflow-hidden shadow-lg w-1/2 mb-2 cursor-pointer'
+      onClick={onClick}>
+      <>
+        {title}
+        {content}
+      </>
     </div>
   );
 };
 
 export { Card };
 
-interface CardProps extends MaximsSuccess {}
+interface CardProps {
+  content: ReactNode;
+  onClick?: () => void;
+  title: ReactNode;
+}

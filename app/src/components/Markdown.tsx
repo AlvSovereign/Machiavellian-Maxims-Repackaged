@@ -3,16 +3,17 @@ import Markdown from 'markdown-to-jsx';
 import { Typography } from './Typography';
 
 const MaximMarkdown = (props: any) => {
+  const variant = props.isCard ? 'small' : 'paragraph';
   const options = {
     overrides: {
-      p: {
+      blockquote: {
         component: (props: any) => (
           <Typography
             classes='mb-4'
             colour='black'
             component='blockquote'
             font='serif'
-            variant='paragraph'
+            variant={variant}
             {...props}
           />
         )
@@ -24,7 +25,7 @@ const MaximMarkdown = (props: any) => {
             colour='black'
             component='blockquote'
             font='serif'
-            variant='paragraph'
+            variant={variant}
             {...props}
           />
         )
@@ -35,7 +36,7 @@ const MaximMarkdown = (props: any) => {
             colour='red'
             component='a'
             font='serif'
-            variant='paragraph'
+            variant={variant}
             {...props}
           />
         )
@@ -47,4 +48,6 @@ const MaximMarkdown = (props: any) => {
 
 export { MaximMarkdown };
 
-interface MaximMarkdown {}
+interface MaximMarkdown {
+  isCard?: boolean;
+}

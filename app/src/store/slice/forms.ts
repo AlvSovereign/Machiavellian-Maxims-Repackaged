@@ -104,6 +104,7 @@ const userSignOut = (): AppThunk => async dispatch => {
   dispatch(clearErrors());
 
   const response: FormSuccess & FormsApiErrorResponse = await API().signout();
+  console.log('response: ', response);
 
   dispatch(removeMe());
   dispatch(

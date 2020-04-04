@@ -82,7 +82,7 @@ const API = () => {
     },
     signout: async () => {
       try {
-        const response: MaximsApiSuccessResponse = await axiosInstance.get(
+        const response: MaximsApiSuccessResponse = await axiosInstance.delete(
           '/auth/signout'
         );
         return response.data;

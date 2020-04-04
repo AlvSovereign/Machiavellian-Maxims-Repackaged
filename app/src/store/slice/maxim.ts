@@ -4,39 +4,14 @@ import { updateMaxims, MeState } from './me';
 import { AppThunk } from 'store/store';
 
 const initialState: MaximState = {
-  currentMaxim: {
-    _id: '',
-    maxim: '',
-    maximNumber: 0
-  },
   errorMessage: '',
   isError: false
 };
 
-const getRandomNumber = (min: number, max: number) =>
-  Math.floor(Math.random() * (max - min) + min);
-
-const fetchMaxim = (arg?: 'next' | 'prev'): AppThunk => async (
-  dispatch,
-  getState
-) => {
-  let currentMaximNumber: number;
+const fetchMaxim = (ref: number): AppThunk => async (dispatch, getState) => {
   let maximNumber: number;
 
-  if (arg) {
-    currentMaximNumber = getState().maxim.currentMaxim.maximNumber;
-    maximNumber =
-      arg === 'prev' ? currentMaximNumber - 1 : currentMaximNumber + 1;
-
-    maximNumber =
-      maximNumber === 0
-        ? (maximNumber = 290)
-        : maximNumber === 291
-        ? (maximNumber = 1)
-        : maximNumber;
-  } else {
-    maximNumber = getRandomNumber(1, 290);
-  }
+  maximNumber = ref === 0 ? 290 : ref === 291 ? 1 : ref;
 
   const maximInState = getState().maxim[maximNumber] || null;
 
@@ -66,15 +41,25 @@ const getSavedMaxims = (): AppThunk => async (dispatch, getState) => {
   const savedMaxims: number[] = getState().me.savedMaxims;
   const maximsFromState: StoredMaxim[] = getState().maxim;
   const maximsForBulkFetch: number[] = [];
-  const retrievedMaximsFromState: StoredMaxim[] = savedMaxims.map(
-    (maxim: number) => maximsFromState[maxim] || maximsForBulkFetch.push(maxim)
-  );
+  const retrievedMaximsFromState: any = savedMaxims.map((maxim: number) => {
+    return (
+      { ...maximsFromState[maxim], maximNumber: maxim } ||
+      maximsForBulkFetch.push(maxim)
+    );
+  });
 
   const response = maximsForBulkFetch.length
     ? await API().bulkFetchMaxims(maximsForBulkFetch)
     : [];
 
-  const mergedMaxims = [...retrievedMaximsFromState, ...response];
+  const mergedMaxims = [
+    ...retrievedMaximsFromState,
+    ...response
+  ].sort((a: MaximsSuccess, b: MaximsSuccess) =>
+    a.maximNumber > b.maximNumber ? 1 : -1
+  );
+
+  return mergedMaxims;
 };
 
 const savedMaximsToUpdate = (maxims: number[]): AppThunk => async (
@@ -85,6 +70,7 @@ const savedMaximsToUpdate = (maxims: number[]): AppThunk => async (
   const response: MaximsSuccess &
     MaximsApiErrorResponse = await API().updateMaxims({ userId, maxims });
 
+  console.log('response: ', response);
   if (response.status === 500) {
     dispatch(errorFetchingMaxim(response.message));
     return;
@@ -106,9 +92,6 @@ const maximSlice = createSlice({
 
         return {
           payload: {
-            currentMaxim: {
-              ...fetchedMaxim
-            },
             [maximNumber!]: {
               _id,
               maxim
@@ -116,9 +99,6 @@ const maximSlice = createSlice({
           }
         };
       }
-    },
-    currentMaxim: (state, action: PayloadAction<MaximsSuccess>) => {
-      return (state = { ...state, ...action.payload, isError: false });
     },
     errorFetchingMaxim: (state, action: PayloadAction<string>) => {
       return (state = {
@@ -135,7 +115,6 @@ export const { errorFetchingMaxim, getMaxim } = maximSlice.actions;
 export default maximSlice.reducer;
 
 export interface MaximState {
-  currentMaxim: MaximsSuccess;
   [maximNumber: number]: any;
   isError: boolean;
   errorMessage: string;

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { User } from './user.model';
+import { ResponseStatus } from '../../utils/ErrorHandler';
 
 const controllers = {
   updateMaxims: async (req, res, next) => {
@@ -15,11 +16,14 @@ const controllers = {
         },
         (err, result) => {
           if (err) {
-            return next({
-              error: err,
-              message: 'Error savim Maxim to user. Please try again',
-              status: 500
-            });
+            return next(
+              new ErrorHandler(
+                'Error savim Maxim to user. Please try again',
+                ResponseStatus.INTERNAL_ERROR,
+                null,
+                true
+              )
+            );
           }
         }
       )
@@ -28,11 +32,14 @@ const controllers = {
 
       return res.status(201).send({ savedMaxims });
     } catch (err) {
-      next({
-        error: err,
-        message: 'Error savim Maxim. Please try again',
-        status: 500
-      });
+      next(
+        new ErrorHandler(
+          'Error savim Maxim. Please try again',
+          ResponseStatus.INTERNAL_ERROR,
+          null,
+          true
+        )
+      );
     }
   }
 };

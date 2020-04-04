@@ -11,8 +11,11 @@ import authRouter from './resources/auth/auth.router';
 import maximRouter from './resources/maxim/maxim.router';
 import userRouter from './resources/user/user.router';
 import initOauth from './resources/auth/oauth.init';
-import { logErrors } from './utils/logErrors';
-import { genericErrorHandler } from './utils/genericErrorHandler';
+import {
+  ErrorHandler,
+  ErrorMiddleware,
+  ResponseStatus
+} from './utils/ErrorHandler';
 
 const connect = (url, config) => mongoose.connect(url, config);
 
@@ -54,13 +57,16 @@ export const start = async () => {
     app.use('/auth', authRouter);
     app.use('/maxim', maximRouter);
     app.use('/user', userRouter);
-
-    app.use(logErrors);
-    app.use(genericErrorHandler);
+    app.use(ErrorMiddleware);
     app.listen(config.port, () => {
       console.log(`REST API on http://localhost:${config.port}`);
     });
   } catch (err) {
-    console.error(err);
+    throw new ErrorHandler(
+      'Express App failed to run',
+      ResponseStatus.INTERNAL_ERROR,
+      null,
+      false
+    );
   }
 };

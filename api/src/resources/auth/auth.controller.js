@@ -1,5 +1,6 @@
 import { User } from '../user/user.model';
 import config from '../../config';
+import { ErrorHandler, ResponseStatus } from '../../utils/ErrorHandler';
 
 const userSession = ({ email, id }) => ({
   email,
@@ -11,32 +12,41 @@ const controllers = {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return next({
-        status: 401,
-        message: `Please provide valid ${!email ? 'email' : 'password'}`,
-        inputName: !email ? 'email' : 'password'
-      });
+      return next(
+        new ErrorHandler(
+          `Please provide valid ${!email ? 'email' : 'password'}`,
+          ResponseStatus.UNAUTHORIZED,
+          { inputName: !email ? 'email' : 'password' },
+          true
+        )
+      );
     }
 
     const userExists = await User.findOne({ 'local.email': email }).exec();
 
     if (!userExists) {
-      return next({
-        status: 401,
-        message: 'Please provide valid email',
-        inputName: 'email'
-      });
+      return next(
+        new ErrorHandler(
+          'Please provide valid email',
+          ResponseStatus.UNAUTHORIZED,
+          { inputName: 'email' },
+          true
+        )
+      );
     }
 
     try {
       const match = await userExists.checkPassword(password);
 
       if (!match) {
-        return next({
-          status: 401,
-          message: 'Please provide valid password',
-          inputName: 'password'
-        });
+        return next(
+          new ErrorHandler(
+            'Please provide valid password',
+            ResponseStatus.UNAUTHORIZED,
+            null,
+            true
+          )
+        );
       }
 
       const { _id, local, savedMaxims } = userExists;
@@ -46,64 +56,68 @@ const controllers = {
 
       return res.status(201).send({ ...sessionizedUser, savedMaxims });
     } catch (err) {
-      return next({
-        status: 400,
-        err,
-        message: err.message
-      });
+      return next(
+        new ErrorHandler(err.message, ResponseStatus.INTERNAL_ERROR, null, true)
+      );
     }
   },
   signOut: async (req, res, next) => {
     try {
       const { session } = req;
       const { user } = session;
+      console.log('user: ', user);
       if (user) {
         session.destroy(err => {
           if (err) {
-            return next({
-              status: 400,
-              err,
-              message: err.message
-            });
+            return next(
+              new ErrorHandler(err.message, ResponseStatus.INTERNAL_ERROR, null)
+            );
           }
 
-          res.clearCookie(config.session.name);
+          res.clearCookie(user.id);
 
           return res.status(201).send(user);
         });
       } else {
-        return next({
-          status: 400,
-          err: null,
-          message: 'Session does not exist'
-        });
+        return next(
+          new ErrorHandler(
+            'Session does not exist',
+            ResponseStatus.BAD_REQUEST,
+            null,
+            true
+          )
+        );
       }
     } catch (err) {
-      return next({
-        status: 400,
-        err,
-        message: err.message
-      });
+      return next(
+        new ErrorHandler(err.message, ResponseStatus.BAD_REQUEST, null, true)
+      );
     }
   },
   signup: async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return next({
-        status: 401,
-        message: `Please provide valid ${!email ? 'email' : 'password'}`,
-        inputName: !email ? 'email' : 'password'
-      });
+      return next(
+        new ErrorHandler(
+          `Please provide valid ${!email ? 'email' : 'password'}`,
+          ResponseStatus.UNAUTHORIZED,
+          { inputName: !email ? 'email' : 'password' },
+          true
+        )
+      );
     }
 
     const isRegistered = await User.findOne({ 'local.email': email }).exec();
     if (isRegistered) {
-      return next({
-        status: 401,
-        message: 'User already exists, please provide a different email',
-        inputName: 'email'
-      });
+      return next(
+        new ErrorHandler(
+          'User already exists, please provide a different email',
+          ResponseStatus.UNAUTHORIZED,
+          { inputName: 'email' },
+          true
+        )
+      );
     }
 
     try {
@@ -117,11 +131,14 @@ const controllers = {
       req.session.user = sessionizedUser;
       return res.status(201).send({ ...sessionizedUser, savedMaxims });
     } catch (err) {
-      return next({
-        status: 400,
-        message: `Failed creating user: ${err.message}. Please try again.`,
-        inputName: 'email'
-      });
+      return next(
+        new ErrorHandler(
+          `Failed creating user: ${err.message}. Please try again.`,
+          ResponseStatus.BAD_REQUEST,
+          { inputName: 'email' },
+          true
+        )
+      );
     }
   }
 };

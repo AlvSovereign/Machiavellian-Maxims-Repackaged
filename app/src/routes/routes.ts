@@ -4,7 +4,7 @@ import { UserProfile } from 'pages/UserProfile';
 
 const routes: IRoutes = {
   maxim: {
-    path: '/maxim',
+    path: ['/maxim', '/maxim/:maximNumber'],
     component: MaximPage
   },
   userProfile: {
@@ -23,6 +23,6 @@ interface IRoutes {
 }
 
 interface IRoute {
-  path?: string;
+  path?: string | string[];
   component: any;
 }

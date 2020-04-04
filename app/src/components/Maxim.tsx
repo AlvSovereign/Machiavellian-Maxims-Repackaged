@@ -4,26 +4,26 @@ import { Typography } from './Typography';
 import { MaximMarkdown } from './Markdown';
 import { Bookmark, BookmarkOutline } from 'assets/icons';
 
-const Maxim = ({ data, updateSavedMaxims, userLoggedIn }: MaximProps) => {
-  const { _id, isSaved, maxim, maximNumber }: MaximsSuccess & IsSaved = data;
+const Maxim = ({ data, updateSavedMaxims, isLoggedIn }: MaximProps) => {
+  const { isSaved, maxim, maximNumber }: MaximsSuccess & IsSaved = data;
 
   return (
     <div className='container mx-auto'>
       <div className='flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center'>
-        {userLoggedIn && (
+        {isLoggedIn && (
           <div className='self-end cursor-pointer'>
             {isSaved ? (
               <Bookmark
                 height={36}
                 isSelected={true}
                 width={36}
-                onClick={() => updateSavedMaxims(maximNumber, 'unsave')}
+                onClick={() => updateSavedMaxims(maximNumber)}
               />
             ) : (
               <BookmarkOutline
                 height={36}
                 width={36}
-                onClick={() => updateSavedMaxims(maximNumber, 'save')}
+                onClick={() => updateSavedMaxims(maximNumber)}
               />
             )}
           </div>
@@ -53,8 +53,8 @@ export { Maxim };
 
 interface MaximProps {
   data: MaximsSuccess & IsSaved;
-  updateSavedMaxims: (maxim: number, type: 'save' | 'unsave') => void;
-  userLoggedIn: boolean;
+  updateSavedMaxims: (maxim: number) => void;
+  isLoggedIn: boolean;
 }
 
 interface IsSaved {
