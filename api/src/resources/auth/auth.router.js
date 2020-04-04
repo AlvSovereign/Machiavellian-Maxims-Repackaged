@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
+import { validators } from '../../utils/validators';
+import { ErrorHandler, ResponseStatus } from '../../utils/ErrorHandler';
 import controllers from './auth.controller';
 
 const router = Router();
@@ -10,8 +12,32 @@ const googleAuth = passport.authenticate('google', {
 const twitterAuth = passport.authenticate('twitter');
 const facebookAuth = passport.authenticate('facebook');
 
-router.post('/signin', controllers.signIn);
-router.post('/signup', controllers.signup);
+const formValidator = (req, res, next) => {
+  const { email, password } = req.body;
+  const {
+    value: { email: validatedEmail },
+    error
+  } = validators.authForm.validate({
+    email,
+    password
+  });
+
+  if (error) {
+    return next(
+      new ErrorHandler(
+        `Please provide valid ${!validatedEmail ? 'email' : 'password'}`,
+        ResponseStatus.UNAUTHORIZED,
+        { inputName: !validatedEmail ? 'email' : 'password' },
+        true
+      )
+    );
+  } else {
+    return next();
+  }
+};
+
+router.post('/signin', formValidator, controllers.signIn);
+router.post('/signup', formValidator, controllers.signup);
 router.delete('/signout', controllers.signOut);
 
 router.get('/twitter', twitterAuth);

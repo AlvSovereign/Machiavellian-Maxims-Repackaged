@@ -26,6 +26,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@piotr-cz/redux-persist-idb-storage": "^1.0.2",
     "@types/markdown-to-jsx": "^6.11.0",
     "axios": "^0.19.2",

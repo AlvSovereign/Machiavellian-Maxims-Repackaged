@@ -10,18 +10,6 @@ const userSession = ({ email, id }) => ({
 const controllers = {
   signIn: async (req, res, next) => {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return next(
-        new ErrorHandler(
-          `Please provide valid ${!email ? 'email' : 'password'}`,
-          ResponseStatus.UNAUTHORIZED,
-          { inputName: !email ? 'email' : 'password' },
-          true
-        )
-      );
-    }
-
     const userExists = await User.findOne({ 'local.email': email }).exec();
 
     if (!userExists) {
@@ -95,18 +83,7 @@ const controllers = {
     }
   },
   signup: async (req, res, next) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return next(
-        new ErrorHandler(
-          `Please provide valid ${!email ? 'email' : 'password'}`,
-          ResponseStatus.UNAUTHORIZED,
-          { inputName: !email ? 'email' : 'password' },
-          true
-        )
-      );
-    }
+    const { email } = req.body;
 
     const isRegistered = await User.findOne({ 'local.email': email }).exec();
     if (isRegistered) {
