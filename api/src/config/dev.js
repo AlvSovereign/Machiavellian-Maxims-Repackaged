@@ -17,8 +17,8 @@ export const devConfig = {
     retry_strategy: () => 1000
   },
   session: {
-    name: 'session',
+    name: 'userSessionId',
     secret: process.env.SESSION_SECRET,
-    lifetime: 1000 * 60 * 60 * 2
+    lifetime: 604800000 // 7 days from now
   }
 };

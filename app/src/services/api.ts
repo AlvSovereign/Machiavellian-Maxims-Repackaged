@@ -3,7 +3,11 @@ import { AuthFormCredentials } from 'components/Modal';
 
 const API = () => {
   const baseURL = process.env.REACT_APP_API_URL!;
-  const axiosInstance = axios.create({ baseURL });
+  const options = {
+    baseURL,
+    withCredentials: true
+  };
+  const axiosInstance = axios.create(options);
 
   return {
     bulkFetchMaxims: async (maxims: number[]) => {
@@ -82,7 +86,7 @@ const API = () => {
     },
     signout: async () => {
       try {
-        const response: MaximsApiSuccessResponse = await axiosInstance.delete(
+        const response: MaximsApiSuccessResponse = await axiosInstance.post(
           '/auth/signout'
         );
         return response.data;

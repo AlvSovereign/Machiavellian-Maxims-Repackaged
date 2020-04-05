@@ -15,6 +15,7 @@ const checkRedisCache = async (key, next) => {
   } catch (err) {
     return next(
       new ErrorHandler(
+        err,
         'Error fetching Maxim from Cache. Please try again',
         ResponseStatus.INTERNAL_ERROR,
         null,
@@ -46,6 +47,7 @@ const controllers = {
     } catch (err) {
       return next(
         new ErrorHandler(
+          err,
           'Error fetching Maxim. Please try again',
           ResponseStatus.INTERNAL_ERROR,
           null,
@@ -80,6 +82,7 @@ const controllers = {
     } catch (err) {
       return next(
         new ErrorHandler(
+          err,
           'Error fetching Maxims. Please try again',
           ResponseStatus.INTERNAL_ERROR,
           null,

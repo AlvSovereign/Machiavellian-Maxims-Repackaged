@@ -18,6 +18,7 @@ const controllers = {
           if (err) {
             return next(
               new ErrorHandler(
+                err,
                 'Error savim Maxim to user. Please try again',
                 ResponseStatus.INTERNAL_ERROR,
                 null,
@@ -34,6 +35,7 @@ const controllers = {
     } catch (err) {
       next(
         new ErrorHandler(
+          err,
           'Error savim Maxim. Please try again',
           ResponseStatus.INTERNAL_ERROR,
           null,

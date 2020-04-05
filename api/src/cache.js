@@ -14,6 +14,7 @@ redisClient.on('connect', function() {
 
 redisClient.on('error', function(err) {
   throw new ErrorHandler(
+    err,
     'Connecting to Redis failed',
     ResponseStatus.BAD_REQUEST,
     null,

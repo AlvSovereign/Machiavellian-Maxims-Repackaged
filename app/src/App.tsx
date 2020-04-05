@@ -40,7 +40,7 @@ function App() {
               path={routes.userProfile.path}
               component={routes.userProfile.component}
             />
-            {/* <Route component={routes.invalidPage.component} /> */}
+            <Route component={routes.invalidPage.component} />
           </Router>
           <Modal>
             <AuthForm />

@@ -28,7 +28,11 @@ export const start = async () => {
     const MongoSessionStore = connectStore(session);
 
     app.disable('x-powered-by');
-    app.use(cors());
+    app.use(
+      cors({
+        credentials: true
+      })
+    );
     app.use(json());
     app.use(urlencoded({ extended: true }));
     app.use(morgan('dev'));
@@ -36,6 +40,7 @@ export const start = async () => {
       session({
         cookie: {
           sameSite: true,
+          httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           maxAge: parseInt(config.session.lifetime)
         },
@@ -63,6 +68,7 @@ export const start = async () => {
     });
   } catch (err) {
     throw new ErrorHandler(
+      err,
       'Express App failed to run',
       ResponseStatus.INTERNAL_ERROR,
       null,

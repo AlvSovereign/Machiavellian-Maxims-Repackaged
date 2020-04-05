@@ -9,9 +9,10 @@ const ResponseStatus = Object.freeze({
 });
 
 // centralized error object that derives from Node’s Error
-function ErrorHandler(message, status, additionalInfo, isOperational) {
+function ErrorHandler(err, message, status, additionalInfo, isOperational) {
+  this.constructor.prototype.__proto__ = Error.prototype;
   Error.call(this);
-  Error.captureStackTrace(this);
+  Error.captureStackTrace(this, this.constructor);
   this.message = message;
   this.status = status;
   this.additionalInfo = additionalInfo;
@@ -20,14 +21,13 @@ function ErrorHandler(message, status, additionalInfo, isOperational) {
   this.isTrustedError = error => {
     return error.isOperational;
   };
+
+  console.error('err: ', err);
 }
 
-ErrorHandler.prototype = Object.create(Error.prototype);
-ErrorHandler.prototype.constructor = ErrorHandler;
-
 process.on('uncaughtException', error => {
-  AppError(error);
-  if (!AppError.isTrustedError(error)) process.exit(1);
+  ErrorHandler(error);
+  if (!ErrorHandler.isTrustedError(error)) process.exit(1);
 });
 
 const ErrorMiddleware = (err, req, res, next) => {
@@ -36,7 +36,7 @@ const ErrorMiddleware = (err, req, res, next) => {
   res.status(status).send({
     message:
       message || 'Something went wrong with your request. Please try again',
-    additionalInfo
+    additionalInfo: additionalInfo || undefined
   });
 };
 

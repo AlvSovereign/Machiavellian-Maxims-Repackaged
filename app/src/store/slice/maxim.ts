@@ -70,7 +70,6 @@ const savedMaximsToUpdate = (maxims: number[]): AppThunk => async (
   const response: MaximsSuccess &
     MaximsApiErrorResponse = await API().updateMaxims({ userId, maxims });
 
-  console.log('response: ', response);
   if (response.status === 500) {
     dispatch(errorFetchingMaxim(response.message));
     return;

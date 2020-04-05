@@ -15,7 +15,8 @@ const controllers = {
     if (!userExists) {
       return next(
         new ErrorHandler(
-          'Please provide valid email',
+          null,
+          'User already exists. Try logging in.',
           ResponseStatus.UNAUTHORIZED,
           { inputName: 'email' },
           true
@@ -29,7 +30,8 @@ const controllers = {
       if (!match) {
         return next(
           new ErrorHandler(
-            'Please provide valid password',
+            null,
+            'Please provide valid email or password',
             ResponseStatus.UNAUTHORIZED,
             null,
             true
@@ -45,7 +47,13 @@ const controllers = {
       return res.status(201).send({ ...sessionizedUser, savedMaxims });
     } catch (err) {
       return next(
-        new ErrorHandler(err.message, ResponseStatus.INTERNAL_ERROR, null, true)
+        new ErrorHandler(
+          err,
+          err.message,
+          ResponseStatus.INTERNAL_ERROR,
+          null,
+          true
+        )
       );
     }
   },
@@ -53,22 +61,29 @@ const controllers = {
     try {
       const { session } = req;
       const { user } = session;
-      console.log('user: ', user);
+
       if (user) {
         session.destroy(err => {
           if (err) {
             return next(
-              new ErrorHandler(err.message, ResponseStatus.INTERNAL_ERROR, null)
+              new ErrorHandler(
+                err,
+                err.message,
+                ResponseStatus.INTERNAL_ERROR,
+                null,
+                true
+              )
             );
           }
 
-          res.clearCookie(user.id);
+          res.clearCookie(config.session.name);
 
-          return res.status(201).send(user);
+          return res.status(201).end();
         });
       } else {
         return next(
           new ErrorHandler(
+            null,
             'Session does not exist',
             ResponseStatus.BAD_REQUEST,
             null,
@@ -78,7 +93,13 @@ const controllers = {
       }
     } catch (err) {
       return next(
-        new ErrorHandler(err.message, ResponseStatus.BAD_REQUEST, null, true)
+        new ErrorHandler(
+          err,
+          err.message,
+          ResponseStatus.BAD_REQUEST,
+          null,
+          true
+        )
       );
     }
   },
@@ -89,6 +110,7 @@ const controllers = {
     if (isRegistered) {
       return next(
         new ErrorHandler(
+          null,
           'User already exists, please provide a different email',
           ResponseStatus.UNAUTHORIZED,
           { inputName: 'email' },
@@ -110,6 +132,7 @@ const controllers = {
     } catch (err) {
       return next(
         new ErrorHandler(
+          err,
           `Failed creating user: ${err.message}. Please try again.`,
           ResponseStatus.BAD_REQUEST,
           { inputName: 'email' },

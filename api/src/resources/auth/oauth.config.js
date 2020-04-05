@@ -3,8 +3,8 @@ import config from '../../config';
 const providers = ['twitter', 'google', 'facebook'];
 const urls = providers.map(provider => {
   return process.env.NODE_ENV === 'production'
-    ? `https://react-auth-twitter.herokuapp.com/${provider}/callback`
-    : `http://localhost:4000/auth/${provider}/callback`;
+    ? `https://react-auth-twitter.herokuapp.com/${provider}/redirect`
+    : `http://localhost:4000/auth/${provider}/redirect`;
 });
 
 const [twitterURL, googleURL, facebookURL] = urls;

@@ -23,37 +23,44 @@ const MaximPage = ({ location, match }: MaximProps) => {
     if (location.state) {
       return;
     } else {
-      dispatch(fetchMaxim(maximNumber));
+      if (maximNumber < 291) {
+        dispatch(fetchMaxim(maximNumber));
+      } else {
+        history.push('/maxim-404');
+      }
     }
   }, [location.pathname]);
 
   const getRandomNumber = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min) + min);
 
-  const getRandomMaxim = () => {
-    history.push(`/maxim/${getRandomNumber(1, 290)}`);
-  };
-
   const isSaved = savedMaxims.includes(maximNumber);
   const isLoggedIn = !!email;
 
-  const navigateMaxims = (event: React.KeyboardEvent) => {
-    switch (event.keyCode) {
-      case 13:
-        savedMaxims.includes(maximNumber)
-          ? updateSavedMaxims(maximNumber)
-          : updateSavedMaxims(maximNumber);
-        break;
-      case 32:
-        dispatch(getRandomMaxim());
-        break;
-      case 37:
-        dispatch(fetchMaxim(maximNumber - 1));
-        break;
-      case 39:
-        dispatch(fetchMaxim(maximNumber + 1));
-        break;
+  const navigateMaxims = (event: any, maximNumber: number) => {
+    let randomNumber;
+
+    if (event?.keyCode) {
+      switch (event.keyCode) {
+        case 13:
+          isLoggedIn && savedMaxims.includes(maximNumber)
+            ? updateSavedMaxims(maximNumber)
+            : updateSavedMaxims(maximNumber);
+          break;
+        case 32:
+          randomNumber = getRandomNumber(1, 290);
+          history.push(`/maxim-${randomNumber}`);
+          break;
+        case 37:
+          dispatch(fetchMaxim(maximNumber - 1));
+          return history.push(`/maxim-${maximNumber - 1}`);
+        case 39:
+          dispatch(fetchMaxim(maximNumber + 1));
+          return history.push(`/maxim-${maximNumber + 1}`);
+      }
     }
+
+    history.push(`/maxim-${randomNumber || maximNumber}`);
   };
 
   const updateSavedMaxims = (maximNumber: number) => {
@@ -82,7 +89,7 @@ const MaximPage = ({ location, match }: MaximProps) => {
       ref={focusDiv}
       tabIndex={1}
       className={'h-screen w-screen flex flex-col items-center justify-center'}
-      onKeyDown={e => navigateMaxims(e)}>
+      onKeyDown={e => navigateMaxims(e, maximNumber)}>
       {isError ? (
         <MaximError />
       ) : (
@@ -98,13 +105,13 @@ const MaximPage = ({ location, match }: MaximProps) => {
         <Button
           size='regular'
           type='button'
-          onClick={() => dispatch(fetchMaxim(maximNumber - 1))}
+          onClick={e => navigateMaxims(e, maximNumber - 1)}
           variant='default'>
           &#8592;
         </Button>
         <Button
           size='regular'
-          onClick={() => getRandomMaxim()}
+          onClick={() => history.push(`/maxim-${getRandomNumber(1, 290)}`)}
           type='button'
           variant='default'>
           {'Random Maxim'}
@@ -112,7 +119,7 @@ const MaximPage = ({ location, match }: MaximProps) => {
         <Button
           size='regular'
           type='button'
-          onClick={() => dispatch(fetchMaxim(maximNumber + 1))}
+          onClick={e => navigateMaxims(e, maximNumber + 1)}
           variant='default'>
           &#8594;
         </Button>
