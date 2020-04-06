@@ -1,25 +1,18 @@
 import { Router } from 'express';
-import passport from 'passport';
 import { validators } from '../../utils/validators';
 import { ErrorHandler, ResponseStatus } from '../../utils/ErrorHandler';
 import controllers from './auth.controller';
 
-const router = Router();
-const googleAuth = passport.authenticate('google', {
-  scope: ['profile'],
-  session: false
-});
-const twitterAuth = passport.authenticate('twitter');
-const facebookAuth = passport.authenticate('facebook');
+const authRouter = Router();
 
 const formValidator = (req, res, next) => {
   const { email, password } = req.body;
   const {
     value: { email: validatedEmail },
-    error
+    error,
   } = validators.authForm.validate({
     email,
-    password
+    password,
   });
 
   if (error) {
@@ -53,20 +46,8 @@ const isGuestCheck = (req, res, next) => {
   }
 };
 
-router.post('/signin', isGuestCheck, formValidator, controllers.signIn);
-router.post('/signup', isGuestCheck, formValidator, controllers.signup);
-router.post('/signout', controllers.signOut);
+authRouter.post('/signin', isGuestCheck, formValidator, controllers.signIn);
+authRouter.post('/signup', isGuestCheck, formValidator, controllers.signup);
+authRouter.post('/signout', controllers.signOut);
 
-router.get('/twitter', twitterAuth);
-router.get('/google', googleAuth);
-
-router.get('/twitter/redirect', twitterAuth, (req, res, next) => {
-  console.log('twitter');
-  res.redirect('/maxims');
-});
-router.get('/google/redirect', googleAuth, (req, res, next) => {
-  console.log(111);
-  res.redirect('/maxims' + req.user.token);
-});
-
-export default router;
+export { authRouter };

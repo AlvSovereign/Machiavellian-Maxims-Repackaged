@@ -5,7 +5,7 @@ const API = () => {
   const baseURL = process.env.REACT_APP_API_URL!;
   const options = {
     baseURL,
-    withCredentials: true
+    withCredentials: false,
   };
   const axiosInstance = axios.create(options);
 
@@ -28,18 +28,6 @@ const API = () => {
           `/maxim/${maximNumber}`
         );
         return response.data.data;
-      } catch (error) {
-        console.error(error);
-        return error.response.data;
-      }
-    },
-    googleSignin: async () => {
-      try {
-        const response: MaximsApiSuccessResponse = await axiosInstance.get(
-          '/auth/google'
-        );
-        console.log('response: ', response);
-        return response.data;
       } catch (error) {
         console.error(error);
         return error.response.data;
@@ -95,17 +83,6 @@ const API = () => {
         return error;
       }
     },
-    twitterSignin: async () => {
-      try {
-        const response: MaximsApiSuccessResponse = await axiosInstance.get(
-          '/auth/twitter'
-        );
-        return response.data;
-      } catch (error) {
-        console.error(error);
-        return error;
-      }
-    }
   };
 };
 

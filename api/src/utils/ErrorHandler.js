@@ -21,16 +21,16 @@ function ErrorHandler(err, message, status, additionalInfo, isOperational) {
   this.isTrustedError = error => {
     return error.isOperational;
   };
-
-  console.error('err: ', err);
 }
 
 process.on('uncaughtException', error => {
-  ErrorHandler(error);
-  if (!ErrorHandler.isTrustedError(error)) process.exit(1);
+  console.error('error: ', error);
+  const handler = new ErrorHandler(error);
+  if (!handler.isTrustedError(error)) process.exit(1);
 });
 
 const ErrorMiddleware = (err, req, res, next) => {
+  console.error('err: ', err);
   const { additionalInfo, message, status } = err;
 
   res.status(status).send({

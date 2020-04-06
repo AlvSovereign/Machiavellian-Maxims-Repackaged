@@ -4,7 +4,7 @@ import {
   googleSignin,
   twitterSignin,
   userRegister,
-  userSignIn
+  userSignIn,
 } from 'store/slice/forms';
 import { Button } from './Button';
 import { Input } from './Input';
@@ -91,28 +91,6 @@ const AuthForm = () => {
             : formType === 'register'
             ? 'Register'
             : 'Login'}
-        </Button>
-      </div>
-      <div className='flex items-center justify-between'>
-        <Button
-          isLoading={loading}
-          onClick={() => dispatch(googleSignin())}
-          size='regular'
-          type='button'
-          width='full'
-          variant='default'>
-          {'Continue with Google'}
-        </Button>
-      </div>
-      <div className='flex items-center justify-between'>
-        <Button
-          isLoading={loading}
-          onClick={() => dispatch(twitterSignin())}
-          size='regular'
-          type='button'
-          width='full'
-          variant='default'>
-          {'Continue with Twitter'}
         </Button>
       </div>
       <hr />
